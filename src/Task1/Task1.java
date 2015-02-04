@@ -16,6 +16,10 @@ public class Task1 extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
         Job job = new Job();
+
+        job.getConfiguration().addResource("core-config.xml");
+        job.getConfiguration().set("mapred.jar", "file:///home/1106729i/Desktop/BD4/bin/task1.jar");
+
         job.setJobName("Task 1");
         job.setJarByClass(Task1.class);
 
@@ -27,6 +31,7 @@ public class Task1 extends Configured implements Tool {
 
         job.getConfiguration().set("StartDate", strings[2]);
         job.getConfiguration().set("EndDate", strings[3]);
+
 
         FileInputFormat.addInputPath(job, new Path(strings[0]));
         FileOutputFormat.setOutputPath(job, new Path(strings[1]));
