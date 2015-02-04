@@ -16,10 +16,10 @@ public class Task1Mapper extends Mapper<IntWritable, Text, IntWritable, IntWrita
     private static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     private static final short REVISION_EXPECTED_TOKEN_COUNT = 6;
 
-    public void map(IntWritable article_id, Text value, Context context) throws InterruptedException, IOException {
+    public void map(IntWritable article_id, Text value, Context context) throws InterruptedException, IOException, ParseException {
 
-        String StartDate = context.getConfiguration().get("StartDate");
-        String EndDate = context.getConfiguration().get("EndDate");
+        String startDate = context.getConfiguration().get("StartDate");
+        String endDate = context.getConfiguration().get("EndDate");
 
         String line = value.toString();
         StringTokenizer tokenizer = new StringTokenizer(line);
