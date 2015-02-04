@@ -17,6 +17,10 @@ public class Task1Mapper extends Mapper<IntWritable, Text, IntWritable, IntWrita
     private static final short REVISION_EXPECTED_TOKEN_COUNT = 6;
 
     public void map(IntWritable article_id, Text value, Context context) throws InterruptedException, IOException {
+
+        String StartDate = context.getConfiguration().get("StartDate");
+        String EndDate = context.getConfiguration().get("EndDate");
+
         String line = value.toString();
         StringTokenizer tokenizer = new StringTokenizer(line);
 

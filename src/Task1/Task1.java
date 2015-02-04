@@ -25,6 +25,8 @@ public class Task1 extends Configured implements Tool {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
+        job.getConfiguration().set("StartDate", strings[2]);
+        job.getConfiguration().set("EndDate", strings[3]);
         FileInputFormat.addInputPath(job, new Path(strings[0]));
         FileOutputFormat.setOutputPath(job, new Path(strings[1]));
 
