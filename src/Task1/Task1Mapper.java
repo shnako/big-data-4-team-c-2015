@@ -6,7 +6,6 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -18,8 +17,8 @@ public class Task1Mapper extends Mapper<IntWritable, Text, IntWritable, IntWrita
 
     public void map(IntWritable article_id, Text value, Context context) throws InterruptedException, IOException {
 
-        String StartDate = context.getConfiguration().get("StartDate");
-        String EndDate = context.getConfiguration().get("EndDate");
+        String startDate = context.getConfiguration().get("StartDate");
+        String endDate = context.getConfiguration().get("EndDate");
 
         String line = value.toString();
         StringTokenizer tokenizer = new StringTokenizer(line);
@@ -35,9 +34,14 @@ public class Task1Mapper extends Mapper<IntWritable, Text, IntWritable, IntWrita
         }
     }
 
-    private static boolean isInTimeFrame(String startDate, String endDate, String timestamp) throws ParseException {
-        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-        Date timestampDate = iso8601Format.parse(timestamp);
-        return iso8601Format.parse(startDate).before(timestampDate) && timestampDate.before(iso8601Format.parse(endDate));
+    private static boolean isInTimeFrame(String startDate, String endDate, String timestamp) {
+        try {
+            DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
+            Date timestampDate = iso8601Format.parse(timestamp);
+            return iso8601Format.parse(startDate).before(timestampDate) && timestampDate.before(iso8601Format.parse(endDate));
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            return false;
+        }
     }
 }
