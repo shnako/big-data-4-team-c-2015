@@ -16,12 +16,12 @@ public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> 
     private IntWritable articleID = new IntWritable();
     private IntWritable revisionID = new IntWritable();
 
-    private Date startDate;
-    private Date endDate;
+    private String startDateString;
+    private String endDateString;
 
     public void setup(Context context) {
-        startDate = Helpers.convertTimestampToDate(context.getConfiguration().get("StartDate"));
-        endDate = Helpers.convertTimestampToDate(context.getConfiguration().get("EndDate"));
+        startDateString = context.getConfiguration().get("StartDate");
+        endDateString = context.getConfiguration().get("EndDate");
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
@@ -34,6 +34,8 @@ public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> 
             tokenizer.nextToken(); // Skip the article title.
 
             // If the timestamp is between the specified dates, output it.
+            Date startDate = Helpers.convertTimestampToDate(startDateString);
+            Date endDate = Helpers.convertTimestampToDate(endDateString);
             Date timestamp = Helpers.convertTimestampToDate(tokenizer.nextToken());
             if (startDate.before(timestamp) && timestamp.before(endDate)) {
                 context.write(articleID, revisionID);
