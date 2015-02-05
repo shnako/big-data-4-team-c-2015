@@ -17,6 +17,6 @@ public class Task1Reducer extends Reducer<IntWritable, IntWritable, IntWritable,
             revisionCount++;
         }
 
-        context.write(articleId, new Text((String.valueOf(revisionCount) + " " + revisions).trim()));
+        context.write(articleId, new Text(revisionCount + " " + revisions.toString().trim()));
     }
 }
