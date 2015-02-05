@@ -6,6 +6,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> {
@@ -15,12 +16,12 @@ public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> 
     private IntWritable articleID = new IntWritable();
     private IntWritable revisionID = new IntWritable();
 
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
 
     public void setup(Context context) {
-        startDate = context.getConfiguration().get("StartDate");
-        endDate = context.getConfiguration().get("EndDate");
+        startDate = Helpers.convertTimestampToDate(context.getConfiguration().get("StartDate"));
+        endDate = Helpers.convertTimestampToDate(context.getConfiguration().get("EndDate"));
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
@@ -31,7 +32,10 @@ public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> 
             articleID.set(Integer.parseInt(tokenizer.nextToken()));
             revisionID.set(Integer.parseInt(tokenizer.nextToken()));
             tokenizer.nextToken(); // Skip the article title.
-            if (Helpers.isInTimeFrame(startDate, endDate, tokenizer.nextToken())) {
+
+            // If the timestamp is between the specified dates, output it.
+            Date timestamp = Helpers.convertTimestampToDate(tokenizer.nextToken());
+            if (startDate.before(timestamp) && timestamp.before(endDate)) {
                 context.write(articleID, revisionID);
             }
         }
