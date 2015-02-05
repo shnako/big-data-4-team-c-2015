@@ -16,39 +16,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 
 public class Task1 extends Configured implements Tool {
-    public static class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> {
-        private String startDateString;
-        private String endDateString;
-
-        public void setup(Context context) {
-            startDateString = context.getConfiguration().get("StartDate");
-            endDateString = context.getConfiguration().get("EndDate");
-        }
-
-        public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
-            StringTokenizer tokenizer = new StringTokenizer(value.toString());
-
-            // Ensure we only process the lines containing the REVISION tag which have the correct number of tokens.
-            if (tokenizer.hasMoreTokens() && tokenizer.nextToken().equals(Helpers.REVISION_TAG) && tokenizer.countTokens() == Helpers.REVISION_EXPECTED_TOKEN_COUNT) {
-                String articleId = tokenizer.nextToken();
-                String revisionId = tokenizer.nextToken();
-                tokenizer.nextToken(); // Skip the article title.
-
-                // If the timestamp is between the specified dates, output it.
-                Date startDate = Helpers.convertTimestampToDate(startDateString);
-                Date endDate = Helpers.convertTimestampToDate(endDateString);
-                Date timestamp = Helpers.convertTimestampToDate(tokenizer.nextToken());
-                if ((startDate.before(timestamp) || startDate.equals(timestamp)) && (timestamp.before(endDate) || endDate.equals(timestamp))) {
-                    context.write(new IntWritable(Integer.parseInt(articleId)), new IntWritable(Integer.parseInt(revisionId)));
-                }
-            }
-        }
-    }
-
     public static class Task1Reducer extends Reducer<IntWritable, IntWritable, IntWritable, Text> {
         public void reduce(IntWritable articleId, Iterable<IntWritable> revisionIds, Context context) throws InterruptedException, IOException {
             int revisionCount = 0;
@@ -63,12 +33,35 @@ public class Task1 extends Configured implements Tool {
         }
     }
 
+    public static class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> {
+        private String startDateString;
+        private String endDateString;
+
+        public void setup(Context context) {
+            startDateString = context.getConfiguration().get("StartDate");
+            endDateString = context.getConfiguration().get("EndDate");
+        }
+
+        public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
+            String[] tokens = Helpers.fastStartsWithAndTokenize(4, value.toString(), Helpers.REVISION_TAG);
+            if (tokens != null) {
+                // If the timestamp is between the specified dates, output it.
+                Date startDate = Helpers.convertTimestampToDate(startDateString);
+                Date endDate = Helpers.convertTimestampToDate(endDateString);
+                Date timestamp = Helpers.convertTimestampToDate(tokens[3]);
+                if ((startDate.before(timestamp) || startDate.equals(timestamp)) && (timestamp.before(endDate) || endDate.equals(timestamp))) {
+                    context.write(new IntWritable(Integer.parseInt(tokens[0])), new IntWritable(Integer.parseInt(tokens[1])));
+                }
+            }
+        }
+    }
+
     @Override
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance();
 
         //job.getConfiguration().addResource("core-config.xml");
-        job.getConfiguration().set("mapred.jar", "file:///users/level4/1106695s/Desktop/big-data-4-team-c-2015/out/artifacts/BD4AX13_jar/BD4AX1.jar");
+        //job.getConfiguration().set("mapred.jar", "file:///home/cloudera/Desktop/big-data-4-team-c-2015/out/artifacts/big_data_4_team_c_2015_jar/big-data-4-team-c-2015.jar");
 
         job.setJobName("Task 1");
         job.setJarByClass(Task1.class);
