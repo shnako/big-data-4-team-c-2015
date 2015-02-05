@@ -1,8 +1,6 @@
 package helpers;
 
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -86,21 +84,5 @@ public abstract class Helpers {
 
         // Return null if the requested number of tokens couldn't be extracted.
         return result[desiredTokenCount - 1] != null ? result : null;
-    }
-
-    public static final class TextArrayWritable extends ArrayWritable {
-        @SuppressWarnings("UnusedDeclaration")
-        public TextArrayWritable() {
-            super(Text.class);
-        }
-
-        public TextArrayWritable(String[] strings) {
-            super(Text.class);
-            Text[] texts = new Text[strings.length];
-            for (int i = 0; i < strings.length; i++) {
-                texts[i] = new Text(strings[i]);
-            }
-            set(texts);
-        }
     }
 }

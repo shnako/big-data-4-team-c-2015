@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.Helpers;
+import helpers.TextArrayWritable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -20,7 +21,7 @@ import java.util.Date;
 
 
 public class Task3 extends Configured implements Tool {
-    public static class Task3Mapper extends Mapper<Object, Text, IntWritable, Helpers.TextArrayWritable> {
+    public static class Task3Mapper extends Mapper<Object, Text, IntWritable, TextArrayWritable> {
         private Date timestamp;
 
         public void setup(Context context) {
@@ -35,18 +36,18 @@ public class Task3 extends Configured implements Tool {
                 Date revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
                 if (revisionTimestamp.before(timestamp) || revisionTimestamp.equals(timestamp)) {
                     String[] articleParameters = {tokens[1], revisionTimestampString};
-                    context.write(new IntWritable(Integer.parseInt(tokens[0])), new Helpers.TextArrayWritable(articleParameters));
+                    context.write(new IntWritable(Integer.parseInt(tokens[0])), new TextArrayWritable(articleParameters));
                 }
             }
         }
     }
 
-    public static class Task3Reducer extends Reducer<IntWritable, Helpers.TextArrayWritable, IntWritable, Text> {
-        public void reduce(IntWritable articleId, Iterable<Helpers.TextArrayWritable> revisionIdsDates, Context context) throws InterruptedException, IOException {
+    public static class Task3Reducer extends Reducer<IntWritable, TextArrayWritable, IntWritable, Text> {
+        public void reduce(IntWritable articleId, Iterable<TextArrayWritable> revisionIdsDates, Context context) throws InterruptedException, IOException {
             Date lastDate = null;
             String revisionId = ""; // Use string as it will be output to String anyway.
 
-            for (Helpers.TextArrayWritable revisionIdDate : revisionIdsDates) {
+            for (TextArrayWritable revisionIdDate : revisionIdsDates) {
                 Writable[] contents = revisionIdDate.get();
                 //contents[0] = revisionId, contents[1] = timestamp.
                 Date date = Helpers.convertTimestampToDate((contents[1]).toString());
@@ -78,7 +79,7 @@ public class Task3 extends Configured implements Tool {
         job.setReducerClass(Task3Reducer.class);
 
         job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(Helpers.TextArrayWritable.class);
+        job.setMapOutputValueClass(TextArrayWritable.class);
 
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
