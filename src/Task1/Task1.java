@@ -24,8 +24,7 @@ public class Task1 extends Configured implements Tool {
         job.setJarByClass(Task1.class);
 
         job.setMapperClass(Task1Mapper.class);
-        job.setCombinerClass(Task1Reducer.class);
-        //job.setGroupingComparatorClass(IntWritableComparator.class);
+        //job.setCombinerClass(Task1Reducer.class);
         job.setReducerClass(Task1Reducer.class);
 
         job.setMapOutputKeyClass(IntWritable.class);
@@ -46,15 +45,5 @@ public class Task1 extends Configured implements Tool {
 
     public static void main (String[] args) throws Exception {
         System.exit(ToolRunner.run(new Configuration(), new Task1(), args));
-    }
-
-    /* TODO: Get this Working */
-    private class IntWritableComparator extends WritableComparator {
-        @Override
-        public int compare(WritableComparable t1, WritableComparable t2) {
-            IntWritable int1 = (IntWritable) t1;
-            IntWritable int2 = (IntWritable) t2;
-            return int1.compareTo(int2);
-        }
     }
 }
