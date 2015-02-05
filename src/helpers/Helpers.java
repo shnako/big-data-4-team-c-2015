@@ -24,6 +24,16 @@ public class Helpers {
         }
     }
 
+    public static String convertDateToTimestamp(Date date) {
+        try {
+            DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
+            return iso8601Format.format(date);
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+
     public static Integer[] getSortedIntWritableCollection(Iterable<IntWritable> revisionIds) {
         List<Integer> list = new ArrayList<Integer>();
         Integer[] dummy = new Integer[0];
