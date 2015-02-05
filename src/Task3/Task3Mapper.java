@@ -9,13 +9,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-public class Task3Mapper extends Mapper<Object, Text, IntWritable, IntWritable> {
-    private static final String REVISION_TAG = "REVISION";
-    private static final short REVISION_EXPECTED_TOKEN_COUNT = 6;
-
-    private IntWritable articleID = new IntWritable();
-    private IntWritable revisionID = new IntWritable();
-
+public class Task3Mapper extends Mapper<Object, Text, IntWritable, Text> {
     private Date timestamp;
 
     public void setup(Context context) {
@@ -26,15 +20,17 @@ public class Task3Mapper extends Mapper<Object, Text, IntWritable, IntWritable> 
         StringTokenizer tokenizer = new StringTokenizer(value.toString());
 
         // Ensure we only process the lines containing the REVISION tag which have the correct number of tokens.
-        if (tokenizer.hasMoreTokens() && tokenizer.nextToken().equals(REVISION_TAG) && tokenizer.countTokens() == REVISION_EXPECTED_TOKEN_COUNT) {
-            /*
-            articleID.set(Integer.parseInt(tokenizer.nextToken()));
-            revisionID.set(Integer.parseInt(tokenizer.nextToken()));
+        if (tokenizer.hasMoreTokens() && tokenizer.nextToken().equals(Helpers.REVISION_TAG) && tokenizer.countTokens() == Helpers.REVISION_EXPECTED_TOKEN_COUNT) {
+            IntWritable articleID = new IntWritable(Integer.parseInt(tokenizer.nextToken()));
+            int revisionID = Integer.parseInt(tokenizer.nextToken());
             tokenizer.nextToken(); // Skip the article title.
-            if (Helpers.isInTimeFrame(timestamp, endDate, tokenizer.nextToken())) {
-                context.write(articleID, revisionID);
+
+            // If the timestamp is before or on the specified date, output it.
+            String revisionTimestampString = tokenizer.nextToken();
+            Date revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
+            if (revisionTimestamp.before(timestamp) || revisionTimestamp.equals(timestamp)) {
+                context.write(articleID, new Text(revisionID + " " + revisionTimestampString));
             }
-            */
         }
     }
 }
