@@ -19,7 +19,7 @@ public class Task2 extends Configured implements Tool {
         Job job = Job.getInstance();
 
         //job.getConfiguration().addResource("core-config.xml");
-        //job.getConfiguration().set("mapred.jar", "file:///home/1106729i/Desktop/BD4/bin/task1.jar");
+        //job.getConfiguration().set("mapred.jar", "file:///home/1106729i/Desktop/BD4/bin/task2.jar");
 
         job.setJobName("Task 2 - Stage 1");
         job.setJarByClass(Task2.class);
@@ -46,10 +46,6 @@ public class Task2 extends Configured implements Tool {
             job.setJobName("Task 2  - Stage 2");
             job.setMapperClass(Task2IdentityMapper.class);
             job.setReducerClass(Task2SortingReducer.class);
-
-            job.setPartitionerClass(Task2KeyValue.Task2Partitioner.class);
-            job.setSortComparatorClass(Task2KeyValue.Task2KeyComparator.class);
-            job.setGroupingComparatorClass(Task2KeyValue.Task2GroupComparator.class);
 
             job.setMapOutputKeyClass(Task2KeyValue.class);
             job.setMapOutputValueClass(NullWritable.class);

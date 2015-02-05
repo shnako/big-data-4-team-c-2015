@@ -1,7 +1,7 @@
 package Task2;
 
+import com.google.common.collect.ComparisonChain;
 import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapreduce.Partitioner;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -37,11 +37,7 @@ public class Task2KeyValue implements WritableComparable<Task2KeyValue> {
     }
 
     public int compareTo(Task2KeyValue kv) {
-        int compare = articleId.compareTo(kv.articleId);
-        if (compare == 0)
-            compare = revisionCount.compareTo(kv.revisionCount);
-
-        return compare;
+        return ComparisonChain.start().compare(kv.revisionCount, revisionCount).compare(articleId, kv.articleId).result();
     }
 
     public void write(DataOutput out) throws IOException {
@@ -58,51 +54,5 @@ public class Task2KeyValue implements WritableComparable<Task2KeyValue> {
 
     public String toString() {
         return articleId + "\t" + revisionCount;
-    }
-
-    public static class Task2Partitioner extends Partitioner<Task2KeyValue, NullWritable> {
-        public int getPartition(Task2KeyValue kv, NullWritable n, int numPartitions) {
-            int revisionCount = kv.getRevisionCount().get();
-
-            if (numPartitions == 0)
-                return 0;
-
-            if (revisionCount <= 10)
-                return 0%numPartitions;
-
-            if (revisionCount >10 && revisionCount <=100)
-                return 1%numPartitions;
-
-            else
-                return 2%numPartitions;
-        }
-    }
-
-    public static class Task2KeyComparator extends WritableComparator {
-        protected Task2KeyComparator() {
-            super(Task2KeyValue.class, true);
-        }
-
-        public int compare(WritableComparable w1, WritableComparable w2) {
-            System.out.println("Key Comparator");
-            Task2KeyValue kv1 = (Task2KeyValue) w1;
-            Task2KeyValue kv2 = (Task2KeyValue) w2;
-
-            return -1 * kv1.getRevisionCount().compareTo(kv2.getRevisionCount());
-        }
-    }
-
-    public static class Task2GroupComparator extends WritableComparator {
-        protected Task2GroupComparator() {
-            super(Task2KeyValue.class, true);
-        }
-
-        public int compare(WritableComparable w1, WritableComparable w2) {
-            System.out.println("Group Comparator");
-            Task2KeyValue kv1 = (Task2KeyValue) w1;
-            Task2KeyValue kv2 = (Task2KeyValue) w2;
-
-            return  kv2.getArticleId().compareTo(kv1.getArticleId());
-        }
     }
 }
