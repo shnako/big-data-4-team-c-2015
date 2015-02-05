@@ -1,4 +1,4 @@
-package Task1;
+package Task3;
 
 import helpers.Helpers;
 import org.apache.hadoop.io.IntWritable;
@@ -9,13 +9,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> {
-    private String startDateString;
-    private String endDateString;
+public class Task3Mapper extends Mapper<Object, Text, IntWritable, Text> {
+    private Date timestamp;
 
     public void setup(Context context) {
-        startDateString = context.getConfiguration().get("StartDate");
-        endDateString = context.getConfiguration().get("EndDate");
+        timestamp = Helpers.convertTimestampToDate(context.getConfiguration().get("Timestamp"));
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
@@ -24,15 +22,14 @@ public class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> 
         // Ensure we only process the lines containing the REVISION tag which have the correct number of tokens.
         if (tokenizer.hasMoreTokens() && tokenizer.nextToken().equals(Helpers.REVISION_TAG) && tokenizer.countTokens() == Helpers.REVISION_EXPECTED_TOKEN_COUNT) {
             IntWritable articleID = new IntWritable(Integer.parseInt(tokenizer.nextToken()));
-            IntWritable revisionID = new IntWritable(Integer.parseInt(tokenizer.nextToken()));
+            int revisionID = Integer.parseInt(tokenizer.nextToken());
             tokenizer.nextToken(); // Skip the article title.
 
-            // If the timestamp is between the specified dates, output it.
-            Date startDate = Helpers.convertTimestampToDate(startDateString);
-            Date endDate = Helpers.convertTimestampToDate(endDateString);
-            Date timestamp = Helpers.convertTimestampToDate(tokenizer.nextToken());
-            if ((startDate.before(timestamp) || startDate.equals(timestamp)) && (timestamp.before(endDate) || endDate.equals(timestamp))) {
-                context.write(articleID, revisionID);
+            // If the timestamp is before or on the specified date, output it.
+            String revisionTimestampString = tokenizer.nextToken();
+            Date revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
+            if (revisionTimestamp.before(timestamp) || revisionTimestamp.equals(timestamp)) {
+                context.write(articleID, new Text(revisionID + " " + revisionTimestampString));
             }
         }
     }
