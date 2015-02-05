@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Helpers {
     public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String REVISION_TAG = "REVISION";
+    public static final short REVISION_EXPECTED_TOKEN_COUNT = 6;
 
     public static Date convertTimestampToDate(String timestamp) {
         try {
