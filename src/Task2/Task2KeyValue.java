@@ -55,4 +55,6 @@ public class Task2KeyValue implements WritableComparable<Task2KeyValue> {
     public String toString() {
         return articleId + "\t" + revisionCount;
     }
+
+    public Task2KeyValue clone() { return new Task2KeyValue(articleId, revisionCount); }
 }

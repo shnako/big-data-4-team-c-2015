@@ -44,8 +44,10 @@ public class Task2 extends Configured implements Tool {
             job = Job.getInstance();
 
             job.setJobName("Task 2  - Stage 2");
+            job.getConfiguration().setInt("TopK", Integer.parseInt(strings[4]));
             job.setMapperClass(Task2IdentityMapper.class);
             job.setReducerClass(Task2SortingReducer.class);
+            job.setNumReduceTasks(1);
 
             job.setMapOutputKeyClass(Task2KeyValue.class);
             job.setMapOutputValueClass(NullWritable.class);
@@ -58,6 +60,7 @@ public class Task2 extends Configured implements Tool {
 
             job.submit();
             int retVal = job.waitForCompletion(true) ? 0 : 1;
+
 
             //FileSystem.delete(new Path("/user/1106729i/temp"), true);
 
