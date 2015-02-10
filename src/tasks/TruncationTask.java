@@ -1,42 +1,43 @@
 package tasks;
 
-import helpers.TextArrayWritable;
-import mappers.BeforeTimeMapper;
+import mappers.TruncationMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import reducers.MostRecentReducer;
 
-
-public class Task3 extends Configured implements Tool {
+/**
+ * Created by mircea on 2/10/15.
+ */
+public class TruncationTask extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance();
 
         //job.getConfiguration().addResource("core-config.xml");
-        //job.getConfiguration().set("mapred.jar", "file:///home/1106729i/Desktop/BD4/bin/task3.jar");
+        //job.getConfiguration().set("mapred.jar", "file:///home/cloudera/Desktop/big-data-4-team-c-2015/out/artifacts/big_data_4_team_c_2015_jar/big-data-4-team-c-2015.jar");
 
-        job.setJobName("Task 3");
-        job.setJarByClass(Task3.class);
+        job.setJobName("Task 1");
+        job.setJarByClass(TruncationTask.class);
 
-        job.setMapperClass(BeforeTimeMapper.class);
-        //job.setCombinerClass(Task3Reducer.class);
-        job.setReducerClass(MostRecentReducer.class);
+        job.setMapperClass(TruncationMapper.class);
+        //job.setCombinerClass(Task1Reducer.class);
 
-        job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(TextArrayWritable.class);
+        job.setNumReduceTasks(0);
 
-        job.setOutputKeyClass(IntWritable.class);
+        job.setMapOutputKeyClass(NullWritable.class);
+        job.setMapOutputValueClass(Text.class);
+
+        job.setOutputKeyClass(NullWritable.class);
         job.setOutputValueClass(Text.class);
 
-        job.getConfiguration().set("Timestamp", strings[2]);
+
 
         FileInputFormat.addInputPath(job, new Path(strings[0]));
         FileOutputFormat.setOutputPath(job, new Path(strings[1]));
@@ -46,6 +47,6 @@ public class Task3 extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        System.exit(ToolRunner.run(new Configuration(), new Task3(), args));
+        System.exit(ToolRunner.run(new Configuration(), new TruncationTask(), args));
     }
 }

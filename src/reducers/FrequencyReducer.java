@@ -1,4 +1,4 @@
-package Task2;
+package reducers;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class Task2FrequencyReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
+public class FrequencyReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
     public void reduce(IntWritable articleId, Iterable<IntWritable> revisionIds, Context context) throws InterruptedException, IOException {
         int revisionCount = 0;
 

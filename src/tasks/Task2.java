@@ -1,8 +1,10 @@
-package Task2;
+package tasks;
 
+import helpers.ArticleRevCountWritable;
+import mappers.FrequencyMapper;
+import mappers.TopKMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
@@ -10,6 +12,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import reducers.FrequencyReducer;
+import reducers.TopKReducer;
 
 
 public class Task2 extends Configured implements Tool {
@@ -24,8 +28,8 @@ public class Task2 extends Configured implements Tool {
         job.setJobName("Task 2 - Stage 1");
         job.setJarByClass(Task2.class);
 
-        job.setMapperClass(Task2FrequencyMapper.class);
-        job.setReducerClass(Task2FrequencyReducer.class);
+        job.setMapperClass(FrequencyMapper.class);
+        job.setReducerClass(FrequencyReducer.class);
 
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);
@@ -45,14 +49,14 @@ public class Task2 extends Configured implements Tool {
 
             job.setJobName("Task 2  - Stage 2");
             job.getConfiguration().setInt("TopK", Integer.parseInt(strings[4]));
-            job.setMapperClass(Task2IdentityMapper.class);
-            job.setReducerClass(Task2SortingReducer.class);
+            job.setMapperClass(TopKMapper.class);
+            job.setReducerClass(TopKReducer.class);
             job.setNumReduceTasks(1);
 
-            job.setMapOutputKeyClass(Task2KeyValue.class);
+            job.setMapOutputKeyClass(ArticleRevCountWritable.class);
             job.setMapOutputValueClass(NullWritable.class);
 
-            job.setOutputKeyClass(Task2KeyValue.class);
+            job.setOutputKeyClass(ArticleRevCountWritable.class);
             job.setOutputValueClass(NullWritable.class);
 
             FileInputFormat.setInputPaths(job, new Path("temp"));

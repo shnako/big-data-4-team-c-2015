@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.Helpers;
+import mappers.FrequencyMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -13,49 +14,13 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import reducers.FrequencyOccurrenceReducer;
 
 import java.io.IOException;
 import java.util.Date;
 
 
 public class Task1 extends Configured implements Tool {
-    public static class Task1Reducer extends Reducer<IntWritable, IntWritable, IntWritable, Text> {
-        public void reduce(IntWritable articleId, Iterable<IntWritable> revisionIds, Context context) throws InterruptedException, IOException {
-            int revisionCount = 0;
-            StringBuilder revisions = new StringBuilder();
-
-            for (Integer revisionId : Helpers.getSortedIntWritableCollection(revisionIds)) {
-                revisions.append(revisionId).append(" ");
-                revisionCount++;
-            }
-
-            context.write(articleId, new Text(revisionCount + " " + revisions.toString().trim()));
-        }
-    }
-
-    public static class Task1Mapper extends Mapper<Object, Text, IntWritable, IntWritable> {
-        private String startDateString;
-        private String endDateString;
-
-        public void setup(Context context) {
-            startDateString = context.getConfiguration().get("StartDate");
-            endDateString = context.getConfiguration().get("EndDate");
-        }
-
-        public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
-            String[] tokens = Helpers.fastStartsWithAndTokenize(4, value.toString(), Helpers.REVISION_TAG);
-            if (tokens != null) {
-                // If the timestamp is between the specified dates, output it.
-                Date startDate = Helpers.convertTimestampToDate(startDateString);
-                Date endDate = Helpers.convertTimestampToDate(endDateString);
-                Date timestamp = Helpers.convertTimestampToDate(tokens[3]);
-                if ((startDate.before(timestamp) || startDate.equals(timestamp)) && (timestamp.before(endDate) || endDate.equals(timestamp))) {
-                    context.write(new IntWritable(Integer.parseInt(tokens[0])), new IntWritable(Integer.parseInt(tokens[1])));
-                }
-            }
-        }
-    }
-
     @Override
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance();
@@ -66,9 +31,9 @@ public class Task1 extends Configured implements Tool {
         job.setJobName("Task 1");
         job.setJarByClass(Task1.class);
 
-        job.setMapperClass(Task1Mapper.class);
+        job.setMapperClass(FrequencyMapper.class);
         //job.setCombinerClass(Task1Reducer.class);
-        job.setReducerClass(Task1Reducer.class);
+        job.setReducerClass(FrequencyOccurrenceReducer.class);
 
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(IntWritable.class);

@@ -1,4 +1,4 @@
-package Task2;
+package helpers;
 
 import com.google.common.collect.ComparisonChain;
 import org.apache.hadoop.io.*;
@@ -8,7 +8,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 
-public class Task2KeyValue implements WritableComparable<Task2KeyValue> {
+public class ArticleRevCountWritable implements WritableComparable<ArticleRevCountWritable> {
     private IntWritable articleId;
     private IntWritable revisionCount;
 
@@ -28,15 +28,15 @@ public class Task2KeyValue implements WritableComparable<Task2KeyValue> {
         return revisionCount;
     }
 
-    public Task2KeyValue(IntWritable articleId, IntWritable revisionCount) {
+    public ArticleRevCountWritable(IntWritable articleId, IntWritable revisionCount) {
         set(articleId, revisionCount);
     }
 
-    public Task2KeyValue() {
+    public ArticleRevCountWritable() {
         set(new IntWritable(), new IntWritable());
     }
 
-    public int compareTo(Task2KeyValue kv) {
+    public int compareTo(ArticleRevCountWritable kv) {
         return ComparisonChain.start().compare(kv.revisionCount, revisionCount).compare(articleId, kv.articleId).result();
     }
 
@@ -56,5 +56,5 @@ public class Task2KeyValue implements WritableComparable<Task2KeyValue> {
         return articleId + "\t" + revisionCount;
     }
 
-    public Task2KeyValue clone() { return new Task2KeyValue(articleId, revisionCount); }
+    public ArticleRevCountWritable clone() { return new ArticleRevCountWritable(articleId, revisionCount); }
 }
