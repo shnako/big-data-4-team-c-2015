@@ -20,10 +20,11 @@ public class TruncationTask extends Configured implements Tool {
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance();
 
-        //job.getConfiguration().addResource("core-config.xml");
-        //job.getConfiguration().set("mapred.jar", "file:///home/cloudera/Desktop/big-data-4-team-c-2015/out/artifacts/big_data_4_team_c_2015_jar/big-data-4-team-c-2015.jar");
+        job.getConfiguration().addResource("client-conf-ug.xml");
+        job.getConfiguration().set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/bin/Truncate.jar");
 
-        job.setJobName("Task 1");
+        System.out.println("Tracker: "+job.getConfiguration().get("mapred.job.tracker"));
+        job.setJobName("Truncation Task");
         job.setJarByClass(TruncationTask.class);
 
         job.setMapperClass(TruncationMapper.class);

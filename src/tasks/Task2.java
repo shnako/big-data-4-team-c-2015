@@ -22,8 +22,8 @@ public class Task2 extends Configured implements Tool {
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance();
 
-        //job.getConfiguration().addResource("core-config.xml");
-        //job.getConfiguration().set("mapred.jar", "file:///home/1106729i/Desktop/BD4/bin/task2.jar");
+        job.getConfiguration().addResource("client-conf-ug.xml");
+        job.getConfiguration().set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/bin/Task2.jar");
 
         job.setJobName("Task 2 - Stage 1");
         job.setJarByClass(Task2.class);
