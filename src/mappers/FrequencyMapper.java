@@ -27,7 +27,14 @@ public class FrequencyMapper extends Mapper<Object, Text, IntWritable, IntWritab
             // If the timestamp is between the specified dates, output it.
             Date startDate = Helpers.convertTimestampToDate(startDateString);
             Date endDate = Helpers.convertTimestampToDate(endDateString);
-            Date timestamp = Helpers.convertTimestampToDate(tokens[3]);
+
+            Date timestamp;
+            try {
+                timestamp = Helpers.convertTimestampToDate(tokens[3]);
+            } catch (Exception ex) {
+                timestamp = Helpers.extractDateStringFromMalformedText(value.toString());
+            }
+
             if ((startDate.before(timestamp) || startDate.equals(timestamp)) && (timestamp.before(endDate) || endDate.equals(timestamp))) {
                 context.write(new IntWritable(Integer.parseInt(tokens[0])), new IntWritable(Integer.parseInt(tokens[1])));
             }

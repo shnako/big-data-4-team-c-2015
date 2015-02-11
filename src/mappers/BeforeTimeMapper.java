@@ -9,9 +9,6 @@ import org.apache.hadoop.mapreduce.Mapper;
 import java.io.IOException;
 import java.util.Date;
 
-/**
- * Created by mircea on 2/10/15.
- */
 public class BeforeTimeMapper extends Mapper<Object, Text, IntWritable, TextArrayWritable> {
     private Date timestamp;
 
@@ -24,7 +21,14 @@ public class BeforeTimeMapper extends Mapper<Object, Text, IntWritable, TextArra
         if (tokens != null) {
             // If the timestamp is before or on the specified date, output it.
             String revisionTimestampString = tokens[3];
-            Date revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
+
+            Date revisionTimestamp;
+            try {
+                revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
+            } catch (Exception ex) {
+                revisionTimestamp = Helpers.extractDateStringFromMalformedText(value.toString());
+            }
+
             if (revisionTimestamp.before(timestamp) || revisionTimestamp.equals(timestamp)) {
                 String[] articleParameters = {tokens[1], revisionTimestampString};
                 context.write(new IntWritable(Integer.parseInt(tokens[0])), new TextArrayWritable(articleParameters));
