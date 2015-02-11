@@ -17,13 +17,13 @@ public abstract class Helpers {
     public static final String REVISION_TAG = "REVISION";
 
     public static Date convertTimestampToDate(String timestamp) throws ParseException {
-            DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-            return iso8601Format.parse(timestamp);
+        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
+        return iso8601Format.parse(timestamp);
     }
 
     public static String convertDateToTimestamp(Date date) {
-            DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-            return iso8601Format.format(date);
+        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
+        return iso8601Format.format(date);
     }
 
     public static Integer[] getSortedIntWritableCollection(Iterable<IntWritable> revisionIds) {

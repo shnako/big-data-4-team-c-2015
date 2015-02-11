@@ -11,10 +11,6 @@ import java.io.IOException;
 
 
 public class TopKMapper extends Mapper<Object, Text, ArticleRevCountWritable, NullWritable> {
-
-    private IntWritable articleID;
-    private IntWritable revisionCount;
-
     private TreeBag bag = new TreeBag();
     private int topK;
     protected void setup(Context context) throws IOException, InterruptedException {
@@ -23,10 +19,9 @@ public class TopKMapper extends Mapper<Object, Text, ArticleRevCountWritable, Nu
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
-
         String[] parsed = value.toString().split("\t");
-        articleID = new IntWritable(Integer.parseInt(parsed[0]));
-        revisionCount = new IntWritable(Integer.parseInt(parsed[1]));
+        IntWritable articleID = new IntWritable(Integer.parseInt(parsed[0]));
+        IntWritable revisionCount = new IntWritable(Integer.parseInt(parsed[1]));
         bag.add(new ArticleRevCountWritable(articleID, revisionCount));
 
         if (bag.size() > topK)

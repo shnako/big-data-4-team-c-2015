@@ -14,7 +14,6 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import reducers.MostRecentReducer;
 
-
 public class Task3 extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {

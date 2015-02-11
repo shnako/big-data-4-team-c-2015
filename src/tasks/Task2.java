@@ -17,9 +17,7 @@ import org.apache.hadoop.util.ToolRunner;
 import reducers.FrequencyReducer;
 import reducers.TopKReducer;
 
-
 public class Task2 extends Configured implements Tool {
-
     @Override
     public int run(String[] strings) throws Exception {
         Job job = Job.getInstance();
@@ -66,7 +64,6 @@ public class Task2 extends Configured implements Tool {
 
             job.submit();
             int retVal = job.waitForCompletion(true) ? 0 : 1;
-
 
             //FileSystem.delete(new Path("/user/1106729i/temp"), true);
 

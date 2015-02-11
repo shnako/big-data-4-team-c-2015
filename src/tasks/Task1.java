@@ -13,7 +13,6 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import reducers.FrequencyOccurrenceReducer;
 
-
 public class Task1 extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {

@@ -1,16 +1,25 @@
 package helpers;
 
 import com.google.common.collect.ComparisonChain;
-import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-
 public class ArticleRevCountWritable implements WritableComparable<ArticleRevCountWritable> {
     private IntWritable articleId;
     private IntWritable revisionCount;
+
+    public ArticleRevCountWritable(IntWritable articleId, IntWritable revisionCount) {
+        set(articleId, revisionCount);
+    }
+
+    public ArticleRevCountWritable() {
+        set(new IntWritable(), new IntWritable());
+    }
 
     public void set(IntWritable articleId, IntWritable revisionCount) {
         this.articleId = new IntWritable();
@@ -26,14 +35,6 @@ public class ArticleRevCountWritable implements WritableComparable<ArticleRevCou
 
     public IntWritable getRevisionCount() {
         return revisionCount;
-    }
-
-    public ArticleRevCountWritable(IntWritable articleId, IntWritable revisionCount) {
-        set(articleId, revisionCount);
-    }
-
-    public ArticleRevCountWritable() {
-        set(new IntWritable(), new IntWritable());
     }
 
     public int compareTo(ArticleRevCountWritable kv) {
@@ -56,5 +57,7 @@ public class ArticleRevCountWritable implements WritableComparable<ArticleRevCou
         return articleId + "\t" + revisionCount;
     }
 
-    public ArticleRevCountWritable clone() { return new ArticleRevCountWritable(articleId, revisionCount); }
+    public ArticleRevCountWritable clone() {
+        return new ArticleRevCountWritable(articleId, revisionCount);
+    }
 }

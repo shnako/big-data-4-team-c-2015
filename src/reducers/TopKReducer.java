@@ -10,6 +10,7 @@ import java.io.IOException;
 public class TopKReducer extends Reducer<ArticleRevCountWritable, NullWritable, ArticleRevCountWritable, NullWritable> {
     private static TreeBag topKBag = new TreeBag();
     private static int topK;
+
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
