@@ -80,7 +80,7 @@ public abstract class Helpers {
     }
 
     public static Date extractDateStringFromMalformedText(String string) {
-        Pattern pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2})\\:(\\d{2})\\:(\\d{2})Z");
+        Pattern pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})Z");
         Matcher matcher = pattern.matcher(string);
 
         if (matcher.find()) {
@@ -94,7 +94,5 @@ public abstract class Helpers {
         } else {
             return null;
         }
-
-
     }
 }

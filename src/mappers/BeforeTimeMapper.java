@@ -32,6 +32,7 @@ public class BeforeTimeMapper extends Mapper<Object, Text, IntWritable, TextArra
                 revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
             } catch (Exception ex) {
                 revisionTimestamp = Helpers.extractDateStringFromMalformedText(value.toString());
+                revisionTimestampString = Helpers.convertDateToTimestamp(revisionTimestamp);
             }
 
             if (revisionTimestamp.before(timestamp) || revisionTimestamp.equals(timestamp)) {
