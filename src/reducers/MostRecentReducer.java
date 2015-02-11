@@ -8,11 +8,9 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 
-/**
- * Created by mircea on 2/10/15.
- */
 public class MostRecentReducer extends Reducer<IntWritable, TextArrayWritable, IntWritable, Text> {
     public void reduce(IntWritable articleId, Iterable<TextArrayWritable> revisionIdsDates, Context context) throws InterruptedException, IOException {
         Date lastDate = null;
@@ -21,7 +19,14 @@ public class MostRecentReducer extends Reducer<IntWritable, TextArrayWritable, I
         for (TextArrayWritable revisionIdDate : revisionIdsDates) {
             Writable[] contents = revisionIdDate.get();
             //contents[0] = revisionId, contents[1] = timestamp.
-            Date date = Helpers.convertTimestampToDate((contents[1]).toString());
+            Date date;
+            try {
+                date = Helpers.convertTimestampToDate((contents[1]).toString());
+            } catch (ParseException ex) {
+                System.err.println("Couldn't parse " + (contents[1]).toString() + " to date: " + ex.getMessage());
+                continue;
+            }
+
             if (lastDate == null) {
                 lastDate = date;
                 revisionId = contents[0].toString();

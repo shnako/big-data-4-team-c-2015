@@ -2,15 +2,12 @@ package mappers;
 
 import helpers.Helpers;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 public class FrequencyMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
     private String startDateString;
@@ -25,8 +22,22 @@ public class FrequencyMapper extends Mapper<Object, Text, IntWritable, IntWritab
         String[] tokens = Helpers.fastStartsWithAndTokenize(4, value.toString(), Helpers.REVISION_TAG);
         if (tokens != null) {
             // If the timestamp is between the specified dates, output it.
-            Date startDate = Helpers.convertTimestampToDate(startDateString);
-            Date endDate = Helpers.convertTimestampToDate(endDateString);
+            Date startDate;
+            Date endDate;
+
+            try {
+                startDate = Helpers.convertTimestampToDate(startDateString);
+            } catch (ParseException ex) {
+                System.err.println("Couldn't parse " + startDateString + " to date: " + ex.getMessage());
+                return;
+            }
+
+            try {
+                endDate = Helpers.convertTimestampToDate(endDateString);
+            } catch (ParseException ex) {
+                System.err.println("Couldn't parse " + endDateString + " to date: " + ex.getMessage());
+                return;
+            }
 
             Date timestamp;
             try {

@@ -3,6 +3,7 @@ package helpers;
 import org.apache.hadoop.io.IntWritable;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,24 +16,14 @@ public abstract class Helpers {
     public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String REVISION_TAG = "REVISION";
 
-    public static Date convertTimestampToDate(String timestamp) {
-        try {
-            DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-            return iso8601Format.parse(timestamp);
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        }
+    public static Date convertTimestampToDate(String timestamp) throws ParseException {
+        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
+        return iso8601Format.parse(timestamp);
     }
 
     public static String convertDateToTimestamp(Date date) {
-        try {
-            DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-            return iso8601Format.format(date);
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        }
+        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
+        return iso8601Format.format(date);
     }
 
     public static Integer[] getSortedIntWritableCollection(Iterable<IntWritable> revisionIds) {

@@ -7,13 +7,19 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 
 public class BeforeTimeMapper extends Mapper<Object, Text, IntWritable, TextArrayWritable> {
     private Date timestamp;
 
     public void setup(Context context) {
-        timestamp = Helpers.convertTimestampToDate(context.getConfiguration().get("Timestamp"));
+
+        try {
+            timestamp = Helpers.convertTimestampToDate(context.getConfiguration().get("Timestamp"));
+        } catch (ParseException ex) {
+            System.err.println("Couldn't parse " + context.getConfiguration().get("Timestamp") + " to date: " + ex.getMessage());
+        }
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
