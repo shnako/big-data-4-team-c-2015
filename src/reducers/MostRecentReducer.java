@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
-/**
- * Created by mircea on 2/10/15.
- */
 public class MostRecentReducer extends Reducer<IntWritable, TextArrayWritable, IntWritable, Text> {
     public void reduce(IntWritable articleId, Iterable<TextArrayWritable> revisionIdsDates, Context context) throws InterruptedException, IOException {
         Date lastDate = null;
