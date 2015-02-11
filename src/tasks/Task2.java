@@ -6,7 +6,9 @@ import mappers.TopKMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.*;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -74,7 +76,7 @@ public class Task2 extends Configured implements Tool {
         return 1;
     }
 
-    public static void main (String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         System.exit(ToolRunner.run(new Configuration(), new Task2(), args));
     }
 }

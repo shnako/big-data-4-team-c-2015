@@ -8,6 +8,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -41,11 +42,20 @@ public class FrequencyMapper extends Mapper<Object, Text, IntWritable, IntWritab
     String[] tokens = Helpers.fastStartsWithAndTokenize(4, value.toString(), Helpers.REVISION_TAG);
     if (tokens != null) {
             // If the timestamp is between the specified dates, output it.
-            Date startDate = Helpers.convertTimestampToDate(startDateString);
-            Date endDate = Helpers.convertTimestampToDate(endDateString);
-            Date timestamp = Helpers.convertTimestampToDate(tokens[3]);
-            if (timestamp == null)
-                System.out.println("Value is: "+value);
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            startDate = Helpers.convertTimestampToDate(startDateString);
+            endDate = Helpers.convertTimestampToDate(endDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+            Date timestamp;
+            try {
+                timestamp = Helpers.convertTimestampToDate(tokens[3]);
+            } catch (Exception ex) {
+                timestamp = Helpers.extractDateStringFromMalformedText(value.toString());
+            }
             if ((startDate.before(timestamp) || startDate.equals(timestamp)) && (timestamp.before(endDate) || endDate.equals(timestamp))) {
                 context.write(new IntWritable(Integer.parseInt(tokens[0])), new IntWritable(Integer.parseInt(tokens[1])));
             }

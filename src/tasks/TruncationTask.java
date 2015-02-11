@@ -12,9 +12,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-/**
- * Created by mircea on 2/10/15.
- */
 public class TruncationTask extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
@@ -23,7 +20,7 @@ public class TruncationTask extends Configured implements Tool {
         job.getConfiguration().addResource("client-conf-ug.xml");
         job.getConfiguration().set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/bin/Truncate.jar");
 
-        System.out.println("Tracker: "+job.getConfiguration().get("mapred.job.tracker"));
+        System.out.println("Tracker: " + job.getConfiguration().get("mapred.job.tracker"));
         job.setJobName("Truncation Task");
         job.setJarByClass(TruncationTask.class);
 
@@ -37,7 +34,6 @@ public class TruncationTask extends Configured implements Tool {
 
         job.setOutputKeyClass(NullWritable.class);
         job.setOutputValueClass(Text.class);
-
 
 
         FileInputFormat.addInputPath(job, new Path(strings[0]));

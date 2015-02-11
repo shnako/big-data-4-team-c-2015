@@ -8,6 +8,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -21,7 +22,12 @@ public class MostRecentReducer extends Reducer<IntWritable, TextArrayWritable, I
         for (TextArrayWritable revisionIdDate : revisionIdsDates) {
             Writable[] contents = revisionIdDate.get();
             //contents[0] = revisionId, contents[1] = timestamp.
-            Date date = Helpers.convertTimestampToDate((contents[1]).toString());
+            Date date = null;
+            try {
+                date = Helpers.convertTimestampToDate((contents[1]).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (lastDate == null) {
                 lastDate = date;
                 revisionId = contents[0].toString();

@@ -7,16 +7,18 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 
-/**
- * Created by mircea on 2/10/15.
- */
 public class BeforeTimeMapper extends Mapper<Object, Text, IntWritable, TextArrayWritable> {
     private Date timestamp;
 
     public void setup(Context context) {
-        timestamp = Helpers.convertTimestampToDate(context.getConfiguration().get("Timestamp"));
+        try {
+            timestamp = Helpers.convertTimestampToDate(context.getConfiguration().get("Timestamp"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
@@ -24,7 +26,14 @@ public class BeforeTimeMapper extends Mapper<Object, Text, IntWritable, TextArra
         if (tokens != null) {
             // If the timestamp is before or on the specified date, output it.
             String revisionTimestampString = tokens[3];
-            Date revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
+
+            Date revisionTimestamp;
+            try {
+                revisionTimestamp = Helpers.convertTimestampToDate(revisionTimestampString);
+            } catch (Exception ex) {
+                revisionTimestamp = Helpers.extractDateStringFromMalformedText(value.toString());
+            }
+
             if (revisionTimestamp.before(timestamp) || revisionTimestamp.equals(timestamp)) {
                 String[] articleParameters = {tokens[1], revisionTimestampString};
                 context.write(new IntWritable(Integer.parseInt(tokens[0])), new TextArrayWritable(articleParameters));
