@@ -18,7 +18,6 @@ public class TruncationTask extends Configured implements Tool {
         Job job = Job.getInstance();
 
         job.getConfiguration().addResource("client-conf-ug.xml");
-        job.getConfiguration().set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/bin/Truncate.jar");
 
         System.out.println("Tracker: " + job.getConfiguration().get("mapred.job.tracker"));
         job.setJobName("Truncation Task");

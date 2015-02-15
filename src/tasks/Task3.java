@@ -20,7 +20,6 @@ public class Task3 extends Configured implements Tool {
         Job job = Job.getInstance();
 
         job.getConfiguration().addResource("client-conf-ug.xml");
-        job.getConfiguration().set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/bin/Task3.jar");
 
         job.setJobName("Task 3");
         job.setJarByClass(Task3.class);

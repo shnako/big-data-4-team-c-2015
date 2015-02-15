@@ -23,7 +23,6 @@ public class Task2 extends Configured implements Tool {
         Job job = Job.getInstance();
 
         job.getConfiguration().addResource("client-conf-ug.xml");
-        job.getConfiguration().set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/bin/Task2.jar");
 
         job.setJobName("Task 2 - Stage 1");
         job.setJarByClass(Task2.class);
@@ -64,8 +63,6 @@ public class Task2 extends Configured implements Tool {
 
             job.submit();
             int retVal = job.waitForCompletion(true) ? 0 : 1;
-
-            //FileSystem.delete(new Path("/user/1106729i/temp"), true);
 
             return retVal;
         }
