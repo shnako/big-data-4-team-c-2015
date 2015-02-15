@@ -7,7 +7,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
-
 public class FrequencyOccurrenceReducer extends Reducer<IntWritable, IntWritable, IntWritable, Text> {
     public void reduce(IntWritable articleId, Iterable<IntWritable> revisionIds, Context context) throws InterruptedException, IOException {
         int revisionCount = 0;
@@ -19,6 +18,7 @@ public class FrequencyOccurrenceReducer extends Reducer<IntWritable, IntWritable
         }
 
         context.write(articleId, new Text(revisionCount + " " + revisions.toString().trim()));
+        System.out.println(articleId + " " + revisionCount + " " + revisions.toString().trim());
     }
 }
 

@@ -28,7 +28,9 @@ public class TopKReducer extends Reducer<ArticleRevCountWritable, NullWritable, 
     protected void cleanup(Context context) throws IOException, InterruptedException {
         super.cleanup(context);
 
-        for (Object k : topKBag)
+        for (Object k : topKBag) {
             context.write((ArticleRevCountWritable) k, NullWritable.get());
+            System.out.println(k);
+        }
     }
 }

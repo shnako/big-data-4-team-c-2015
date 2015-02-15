@@ -13,6 +13,7 @@ import java.io.IOException;
 public class TopKMapper extends Mapper<Object, Text, ArticleRevCountWritable, NullWritable> {
     private TreeBag bag = new TreeBag();
     private int topK;
+
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
         topK = context.getConfiguration().getInt("TopK", 10);

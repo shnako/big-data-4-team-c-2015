@@ -19,17 +19,18 @@ public class FrequencyMapper extends Mapper<Object, Text, IntWritable, IntWritab
     }
 
     public void map(Object key, Text value, Context context) throws InterruptedException, IOException {
-    String[] tokens = Helpers.fastStartsWithAndTokenize(4, value.toString(), Helpers.REVISION_TAG);
-    if (tokens != null) {
+        String[] tokens = Helpers.fastStartsWithAndTokenize(4, value.toString(), Helpers.REVISION_TAG);
+        if (tokens != null) {
             // If the timestamp is between the specified dates, output it.
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = Helpers.convertTimestampToDate(startDateString);
-            endDate = Helpers.convertTimestampToDate(endDateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            Date startDate = null;
+            Date endDate = null;
+            try {
+                startDate = Helpers.convertTimestampToDate(startDateString);
+                endDate = Helpers.convertTimestampToDate(endDateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            
             Date timestamp;
             try {
                 timestamp = Helpers.convertTimestampToDate(tokens[3]);

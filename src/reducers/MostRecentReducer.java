@@ -35,5 +35,6 @@ public class MostRecentReducer extends Reducer<IntWritable, TextArrayWritable, I
         }
 
         context.write(articleId, new Text(revisionId + " " + Helpers.convertDateToTimestamp(lastDate)));
+        System.out.println(articleId + " " + revisionId + " " + Helpers.convertDateToTimestamp(lastDate));
     }
 }
