@@ -24,7 +24,6 @@ public class Task1 extends Configured implements Tool {
         job.setJarByClass(Task1.class);
 
         job.setMapperClass(FrequencyMapper.class);
-        //job.setCombinerClass(Task1Reducer.class);
         job.setReducerClass(FrequencyOccurrenceReducer.class);
 
         job.setMapOutputKeyClass(IntWritable.class);

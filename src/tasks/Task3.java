@@ -25,7 +25,6 @@ public class Task3 extends Configured implements Tool {
         job.setJarByClass(Task3.class);
 
         job.setMapperClass(BeforeTimeMapper.class);
-        //job.setCombinerClass(Task3Reducer.class);
         job.setReducerClass(MostRecentReducer.class);
 
         job.setMapOutputKeyClass(IntWritable.class);
