@@ -24,7 +24,6 @@ public class TruncationTask extends Configured implements Tool {
         job.setJarByClass(TruncationTask.class);
 
         job.setMapperClass(TruncationMapper.class);
-        //job.setCombinerClass(Task1Reducer.class);
 
         job.setNumReduceTasks(0);
 
