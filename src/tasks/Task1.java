@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.FilePrinter;
 import mappers.FrequencyMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -32,6 +33,8 @@ public class Task1 extends Configured implements Tool {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
+        job.setNumReduceTasks(1);
+
         job.getConfiguration().set("StartDate", strings[2]);
         job.getConfiguration().set("EndDate", strings[3]);
 
@@ -39,7 +42,11 @@ public class Task1 extends Configured implements Tool {
         FileOutputFormat.setOutputPath(job, new Path(strings[1]));
 
         job.submit();
-        return job.waitForCompletion(true) ? 0 : 1;
+        int ret = job.waitForCompletion(true) ? 0 : 1;
+
+        FilePrinter.printFile(strings[1]);
+
+        return ret;
     }
 
     public static void main(String[] args) throws Exception {

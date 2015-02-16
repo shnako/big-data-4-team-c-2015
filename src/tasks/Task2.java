@@ -1,6 +1,7 @@
 package tasks;
 
 import helpers.ArticleRevCountWritable;
+import helpers.FilePrinter;
 import mappers.FrequencyMapper;
 import mappers.TopKMapper;
 import org.apache.hadoop.conf.Configuration;
@@ -63,6 +64,8 @@ public class Task2 extends Configured implements Tool {
 
             job.submit();
             int retVal = job.waitForCompletion(true) ? 0 : 1;
+
+            FilePrinter.printFile(strings[1]);
 
             return retVal;
         }

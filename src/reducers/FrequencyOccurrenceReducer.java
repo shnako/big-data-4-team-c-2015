@@ -18,7 +18,6 @@ public class FrequencyOccurrenceReducer extends Reducer<IntWritable, IntWritable
         }
 
         context.write(articleId, new Text(revisionCount + " " + revisions.toString().trim()));
-        System.out.println(articleId + " " + revisionCount + " " + revisions.toString().trim());
     }
 }
 

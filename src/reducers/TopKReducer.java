@@ -2,6 +2,8 @@ package reducers;
 
 import helpers.ArticleRevCountWritable;
 import org.apache.commons.collections.bag.TreeBag;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -30,7 +32,10 @@ public class TopKReducer extends Reducer<ArticleRevCountWritable, NullWritable, 
 
         for (Object k : topKBag) {
             context.write((ArticleRevCountWritable) k, NullWritable.get());
-            System.out.println(k);
         }
+
+        FileSystem fs = FileSystem.get(context.getConfiguration());
+        fs.delete(new Path("temp"), true);
+
     }
 }

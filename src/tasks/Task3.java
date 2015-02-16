@@ -1,5 +1,6 @@
 package tasks;
 
+import helpers.FilePrinter;
 import helpers.TextArrayWritable;
 import mappers.BeforeTimeMapper;
 import org.apache.hadoop.conf.Configuration;
@@ -33,13 +34,19 @@ public class Task3 extends Configured implements Tool {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
+        job.setNumReduceTasks(1);
+
         job.getConfiguration().set("Timestamp", strings[2]);
 
         FileInputFormat.addInputPath(job, new Path(strings[0]));
         FileOutputFormat.setOutputPath(job, new Path(strings[1]));
 
         job.submit();
-        return job.waitForCompletion(true) ? 0 : 1;
+        int ret = job.waitForCompletion(true) ? 0 : 1;
+
+        FilePrinter.printFile(strings[1]);
+
+        return ret;
     }
 
     public static void main(String[] args) throws Exception {
