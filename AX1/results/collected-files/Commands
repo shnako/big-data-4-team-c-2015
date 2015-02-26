@@ -1,0 +1,36 @@
+Task1:
+
+./java-run.sh tasks.Task1 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task1/run1/ 2007-07-14T19:20:00Z 2007-07-16T19:20:00Z
+./java-run.sh tasks.Task1 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task1/run2/ 2007-07-14T19:20:00Z 2007-07-16T19:20:00Z
+./java-run.sh tasks.Task1 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task1/run3/ 2007-07-14T19:20:00Z 2007-07-16T19:20:00Z
+
+Task2:
+./java-run.sh tasks.Task2 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task2/run100_1/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 100
+./java-run.sh tasks.Task2 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task2/run1000_1/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 1000
+./java-run.sh tasks.Task2 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task2/run100_2/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 100
+./java-run.sh tasks.Task2 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task2/run1000_2/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 1000
+./java-run.sh tasks.Task2 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task2/run100_3/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 100
+./java-run.sh tasks.Task2 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task2/run1000_3/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 1000
+
+Task3:
+./java-run.sh tasks.Task3 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task3/run1/ 2006-07-14T19:20:00Z
+./java-run.sh tasks.Task3 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task3/run2/ 2006-07-14T19:20:00Z
+./java-run.sh tasks.Task3 "/user/bd4-ae1/enwiki-20080103-perftest.txt" bd4ax1out/task3/run3/ 2006-07-14T19:20:00Z
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+./hdfs-dfs.sh -ls /user/bd4-ae1/
+
+

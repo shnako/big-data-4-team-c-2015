@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+  <!-- HDFS -->
+  <property>
+    <name>dfs.https.address</name>
+    <value>130.209.249.106:50470</value>
+  </property>
+  <property>
+    <name>dfs.https.port</name>
+    <value>50470</value>
+  </property>
+  <property>
+    <name>dfs.namenode.http-address</name>
+    <value>130.209.249.106:50070</value>
+  </property>
+  <property>
+    <name>dfs.namenode.servicerpc-address</name>
+    <value>130.209.249.106:8022</value>
+  </property>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://130.209.249.106:8020</value>
+  </property>
+  <property>
+    <name>fs.permissions.umask-mode</name>
+    <value>022</value>
+  </property>
+
+  <!-- HBase -->
+  <property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://130.209.249.106:8020/hbase</value>
+  </property>
+  <property>
+    <name>hbase.client.scanner.caching</name>
+    <value>100</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>130.209.249.106,130.209.249.107,130.209.249.108,130.209.249.109,130.209.249.110</value>
+  </property>
+  <property>
+    <name>hbase.zookeeper.property.clientPort</name>
+    <value>2181</value>
+  </property>
+
+  <!-- MapReduce -->
+  <property>
+    <name>mapred.job.tracker</name>
+    <value>130.209.249.106:8021</value>
+  </property>
+  <property>
+    <name>mapred.job.tracker.http.address</name>
+    <value>130.209.249.106:50030</value>
+  </property>
+  <property>
+    <name>mapred.output.compress</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>mapred.output.compression.type</name>
+    <value>BLOCK</value>
+  </property>
+  <property>
+    <name>mapred.output.compression.codec</name>
+    <value>org.apache.hadoop.io.compress.SnappyCodec</value>
+  </property>
+  <property>
+    <name>mapred.map.output.compression.codec</name>
+    <value>org.apache.hadoop.io.compress.SnappyCodec</value>
+  </property>
+  <property>
+    <name>mapred.compress.map.output</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>io.sort.factor</name>
+    <value>64</value>
+  </property>
+  <property>
+    <name>io.sort.record.percent</name>
+    <value>0.05</value>
+  </property>
+  <property>
+    <name>io.sort.spill.percent</name>
+    <value>0.8</value>
+  </property>
+  <property>
+    <name>mapred.reduce.tasks</name>
+    <value>46</value>
+  </property>
+  <property>
+    <name>io.sort.mb</name>
+    <value>192</value>
+  </property>
+  <property>
+    <name>mapred.child.java.opts</name>
+    <value>-Djava.net.preferIPv4Stack=true -Xmx536870912</value>
+  </property>
+  <property>
+    <name>mapred.map.child.java.opts</name>
+    <value> -Xmx536870912</value>
+  </property>
+  <property>
+    <name>mapred.reduce.child.java.opts</name>
+    <value> -Xmx536870912</value>
+  </property>
+  <property>
+    <name>mapred.job.reuse.jvm.num.tasks</name>
+    <value>-1</value>
+  </property>
+  <property>
+    <name>mapred.map.tasks.speculative.execution</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>mapred.reduce.tasks.speculative.execution</name>
+    <value>false</value>
+  </property>
+  <property>
+    <name>mapred.reduce.slowstart.completed.maps</name>
+    <value>0.3</value>
+  </property>
+</configuration>

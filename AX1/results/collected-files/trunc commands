@@ -1,0 +1,21 @@
+Truncation:
+./java-run.sh tasks.TruncationTask "/user/bd4-ae1/enwiki-20080103-perftest.txt" TruncatedInput
+
+Task1:
+./java-run.sh tasks.Task1 TruncatedInput bd4ax1out/task1trunc/run1/ 2007-07-14T19:20:00Z 2007-07-16T19:20:00Z
+./java-run.sh tasks.Task1 TruncatedInput bd4ax1out/task1trunc/run2/ 2007-07-14T19:20:00Z 2007-07-16T19:20:00Z
+./java-run.sh tasks.Task1 TruncatedInput bd4ax1out/task1trunc/run3/ 2007-07-14T19:20:00Z 2007-07-16T19:20:00Z
+
+Task2:
+./java-run.sh tasks.Task2 TruncatedInput bd4ax1out/task2trunc/run100_1/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 100
+./java-run.sh tasks.Task2 TruncatedInput bd4ax1out/task2trunc/run1000_1/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 1000
+./java-run.sh tasks.Task2 TruncatedInput bd4ax1out/task2trunc/run100_2/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 100
+./java-run.sh tasks.Task2 TruncatedInput bd4ax1out/task2trunc/run1000_2/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 1000
+./java-run.sh tasks.Task2 TruncatedInput bd4ax1out/task2trunc/run100_3/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 100
+./java-run.sh tasks.Task2 TruncatedInput bd4ax1out/task2trunc/run1000_3/ 2004-07-14T19:20:00Z 2007-07-14T19:20:00Z 1000
+
+
+Task3:
+./java-run.sh tasks.Task3 TruncatedInput bd4ax1out/task3trunc/run1/ 2006-07-14T19:20:00Z
+./java-run.sh tasks.Task3 TruncatedInput bd4ax1out/task3trunc/run2/ 2006-07-14T19:20:00Z
+./java-run.sh tasks.Task3 TruncatedInput bd4ax1out/task3trunc/run3/ 2006-07-14T19:20:00Z
