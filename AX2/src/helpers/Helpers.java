@@ -1,6 +1,7 @@
 package helpers;
 
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,10 +27,10 @@ public abstract class Helpers {
         return iso8601Format.format(date);
     }
 
-    public static Integer[] getSortedIntWritableCollection(Iterable<IntWritable> revisionIds) {
-        List<Integer> list = new ArrayList<Integer>();
-        Integer[] dummy = new Integer[0];
-        for (IntWritable revision : revisionIds) {
+    public static Long[] getSortedLongWritableCollection(Iterable<LongWritable> revisionIds) {
+        List<Long> list = new ArrayList<Long>();
+        Long[] dummy = new Long[0];
+        for (LongWritable revision : revisionIds) {
             list.add(revision.get());
         }
 
