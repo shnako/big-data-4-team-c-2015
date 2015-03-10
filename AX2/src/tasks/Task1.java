@@ -26,29 +26,12 @@ public class Task1 extends Configured implements Tool {
         Configuration conf = HBaseConfiguration.create(getConf());
 
         conf.addResource("client-conf-ug.xml");
-        conf.set("mapred.jar", "~/Desktop/bd4jar/Task1.jar");
+        conf.set("mapred.jar", "~/Desktop/bd4jar/AE2.jar");
 
         Job job = Job.getInstance();
 
         job.setJobName("Task 1");
         job.setJarByClass(Task1.class);
-
-        job.setMapperClass(FrequencyMapper.class);
-        job.setReducerClass(FrequencyOccurrenceReducer.class);
-
-        job.setMapOutputKeyClass(LongWritable.class);
-        job.setMapOutputValueClass(LongWritable.class);
-
-        job.setOutputKeyClass(LongWritable.class);
-        job.setOutputValueClass(Text.class);
-
-        job.setNumReduceTasks(1);
-
-        job.getConfiguration().set("StartDate", strings[2]);
-        job.getConfiguration().set("EndDate", strings[3]);
-
-        FileInputFormat.addInputPath(job, new Path(strings[0]));
-        FileOutputFormat.setOutputPath(job, new Path(strings[1]));
 
         Scan scan = new Scan();
         scan.setBatch(100);
@@ -58,12 +41,21 @@ public class Task1 extends Configured implements Tool {
         //scan.setFilter(new FirstKeyOnlyFilter());
         // TODO Add filter that checks dates.
 
-        TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, FrequencyMapper.class, Text.class, Text.class, job);
+        TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, FrequencyMapper.class, LongWritable.class, LongWritable.class, job);
+
+        job.setReducerClass(FrequencyOccurrenceReducer.class);
+
+        job.setOutputKeyClass(LongWritable.class);
+        job.setOutputValueClass(Text.class);
+
+        //job.setNumReduceTasks(1);
+
+        FileOutputFormat.setOutputPath(job, new Path(strings[0]));
 
         job.submit();
 
         int ret = job.waitForCompletion(true) ? 0 : 1;
-        FilePrinter.printFile(strings[1]);
+        FilePrinter.printFile(strings[0]);
         return ret;
     }
 
