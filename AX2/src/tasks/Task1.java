@@ -14,6 +14,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.partition.TotalOrderPartitioner;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import reducers.FrequencyOccurrenceReducer;
@@ -41,6 +42,7 @@ public class Task1 extends Configured implements Tool {
 
         TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, FrequencyMapper.class, LongWritable.class, LongWritable.class, job);
 
+        job.setPartitionerClass(TotalOrderPartitioner.class);
         job.setReducerClass(FrequencyOccurrenceReducer.class);
 
         job.setOutputKeyClass(LongWritable.class);
