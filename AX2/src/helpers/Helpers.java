@@ -1,26 +1,28 @@
 package helpers;
 
 import com.google.common.collect.ComparisonChain;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.VLongWritable;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public abstract class Helpers {
     public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    //public static final String REVISION_TAG = "REVISION";
 
-    public static DateTime convertTimestampToDate(String dateTimeString) {
-        DateTimeFormatter df = DateTimeFormat.forPattern(ISO8601_FORMAT);
-        return df.withOffsetParsed().parseDateTime(dateTimeString);
+    public static long convertTimestampToMillis(String dateTimeString) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ISO8601_FORMAT);
+        return simpleDateFormat.parse(dateTimeString).getTime();
     }
 
-    public static String convertDateToTimestamp(DateTime dateTime) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(ISO8601_FORMAT);
-        return dateTime.toString(dateTimeFormatter);
+    public static String convertMillisToTimestamp(long millis) {
+        Date date = new Date(millis);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(ISO8601_FORMAT);
+        return simpleDateFormat.format(date);
+    }
+
+    public static String convertMillisToTimestamp(String millis) {
+        return convertMillisToTimestamp(Long.parseLong(millis));
     }
 
     public static Long[] getSortedVLongWritableCollection(Iterable<VLongWritable> revisionIds) {

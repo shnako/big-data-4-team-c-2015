@@ -28,8 +28,8 @@ public class Task2 extends Configured implements Tool {
         //conf.set("mapred.jar", "~/Desktop/bd4jar/AE2.jar");
         conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
 
-        long startDate = Helpers.convertTimestampToDate(strings[2]).getMillis();
-        long endDate = Helpers.convertTimestampToDate(strings[3]).getMillis();
+        long startDate = Helpers.convertTimestampToMillis(strings[2]);
+        long endDate = Helpers.convertTimestampToMillis(strings[3]);
 
         Scan scan = new Scan();
         scan.setBatch(100);

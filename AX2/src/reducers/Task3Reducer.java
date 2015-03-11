@@ -1,5 +1,6 @@
 package reducers;
 
+import helpers.Helpers;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.VLongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -16,6 +17,8 @@ public class Task3Reducer extends Reducer<VLongWritable, Text, VLongWritable, Te
             }
         }
 
-        context.write(articleId, new Text(latestRevisionIdAndDate));
+        //noinspection ConstantConditions
+        String[] idDateSplit = latestRevisionIdAndDate.split(" ");
+        context.write(articleId, new Text(idDateSplit[0] + " " + Helpers.convertMillisToTimestamp(idDateSplit[1])));
     }
 }
