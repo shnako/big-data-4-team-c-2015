@@ -2,34 +2,27 @@ package reducers;
 
 import helpers.Helpers;
 import helpers.TextArrayWritable;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.joda.time.DateTime;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.util.Date;
 
 public class MostRecentReducer extends Reducer<LongWritable, TextArrayWritable, LongWritable, Text> {
     public void reduce(LongWritable articleId, Iterable<TextArrayWritable> revisionIdsDates, Context context) throws InterruptedException, IOException {
-        Date lastDate = null;
+        DateTime lastDate = null;
         String revisionId = ""; // Use string as it will be output to String anyway.
 
         for (TextArrayWritable revisionIdDate : revisionIdsDates) {
             Writable[] contents = revisionIdDate.get();
             //contents[0] = revisionId, contents[1] = timestamp.
-            Date date = null;
-            try {
-                date = Helpers.convertTimestampToDate((contents[1]).toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            DateTime date = Helpers.convertTimestampToDate((contents[1]).toString());
             if (lastDate == null) {
                 lastDate = date;
                 revisionId = contents[0].toString();
-            } else if (date.after(lastDate)) {
+            } else if (date.isAfter(lastDate)) {
                 lastDate = date;
                 revisionId = contents[0].toString();
             }
