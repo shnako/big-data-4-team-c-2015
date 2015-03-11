@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 
-public class TopKMapper extends TableMapper<LongWritable, LongWritable> {
+public class Task2Mapper extends TableMapper<LongWritable, LongWritable> {
     private HashMap<Long, Long> map = new HashMap<Long, Long>();
 
     public void map(ImmutableBytesWritable key, Result value, Context context) throws InterruptedException, IOException {

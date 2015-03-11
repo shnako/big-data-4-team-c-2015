@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class TopKReducer extends Reducer<LongWritable, LongWritable, LongWritable, LongWritable> {
+public class Task2Reducer extends Reducer<LongWritable, LongWritable, LongWritable, LongWritable> {
     private TreeBag bag = new TreeBag();
     private int topK;
 

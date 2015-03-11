@@ -1,7 +1,7 @@
 package tasks;
 
 import helpers.FilePrinter;
-import mappers.TopKMapper;
+import mappers.Task2Mapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import reducers.TopKReducer;
+import reducers.Task2Reducer;
 
 public class Task2 extends Configured implements Tool {
     @Override
@@ -37,8 +37,8 @@ public class Task2 extends Configured implements Tool {
         job.setJobName("Task 2");
         job.setJarByClass(Task2.class);
 
-        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, TopKMapper.class, LongWritable.class, LongWritable.class, job);
-        job.setReducerClass(TopKReducer.class);
+        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, Task2Mapper.class, LongWritable.class, LongWritable.class, job);
+        job.setReducerClass(Task2Reducer.class);
 
         job.setOutputKeyClass(LongWritable.class);
         job.setOutputValueClass(LongWritable.class);

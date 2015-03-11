@@ -10,7 +10,8 @@ import org.apache.hadoop.io.VLongWritable;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class FrequencyMapper extends TableMapper<VLongWritable, Text> {
+public class Task1Mapper extends TableMapper<VLongWritable, Text> {
+
     long lastArticleId = -1;
     StringBuilder stringBuilder;
 
@@ -24,13 +25,13 @@ public class FrequencyMapper extends TableMapper<VLongWritable, Text> {
             stringBuilder = new StringBuilder();
         }
 
-        if (articleId == lastArticleId) {
-            stringBuilder.append(" ").append(revisionId);
-        } else {
-            context.write(new VLongWritable(articleId), new Text(stringBuilder.toString()));
+        if (articleId != lastArticleId) {
+            context.write(new VLongWritable(lastArticleId), new Text(stringBuilder.toString()));
             lastArticleId = articleId;
             stringBuilder = new StringBuilder();
         }
+
+        stringBuilder.append(" ").append(revisionId);
     }
 
     @Override

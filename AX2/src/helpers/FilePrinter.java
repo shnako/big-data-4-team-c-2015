@@ -20,12 +20,15 @@ public class FilePrinter {
             BufferedReader[] readers = new BufferedReader[status.length];
             String line;
             for (int i = 0; i< status.length; i++)
-                readers[i] = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
+                if (status[i].isFile())
+                    readers[i] = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
             for (int i = 0; i<status.length; i++)
-                do {
-                    line = readers[i].readLine();
-                    System.out.println(line);
-                } while(readers[i].ready());
+                if (readers[i] != null)
+                    do {
+                        line = readers[i].readLine();
+                        if (line != null)
+                            System.out.println(line);
+                    } while(readers[i].ready());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,17 +43,21 @@ public class FilePrinter {
             BufferedReader[] readers = new BufferedReader[status.length];
             String[] lines = new String[status.length];
             for (int i = 0; i< status.length; i++) {
-                readers[i] = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
-                lines[i] = readers[i].readLine();
+                if (status[i].isFile()) {
+                    readers[i] = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
+                    lines[i] = readers[i].readLine();
+                }
             }
             while (topK > 0) {
                 long max = 0;
                 int dirty = -1;
                 for (int i = 0; i<status.length; i++) {
+                    if (lines[i] != null) {
                     long revs = Long.parseLong(lines[i].split("\t")[1]);
-                    if (revs > max) {
-                        max = revs;
-                        dirty = i;
+                        if (revs > max) {
+                            max = revs;
+                            dirty = i;
+                        }
                     }
                 }
                 System.out.println(lines[dirty]);

@@ -6,10 +6,10 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 
-public class FrequencyOccurrenceReducer extends Reducer<VLongWritable, Text, VLongWritable, Text> {
-    StringBuilder revisions = new StringBuilder();
-
+public class Task1Reducer extends Reducer<VLongWritable, Text, VLongWritable, Text> {
     public void reduce(VLongWritable articleId, Iterable<Text> revisionStrList, Context context) throws InterruptedException, IOException {
+        StringBuilder revisions = new StringBuilder();
+
         for (Text revisionStr : revisionStrList) {
             revisions.append(revisionStr);
         }
