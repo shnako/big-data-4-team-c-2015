@@ -1,25 +1,31 @@
 package mappers;
 
-import helpers.ArticleRevCountWritable;
-import org.apache.commons.collections.bag.TreeBag;
+
+import helpers.Helpers;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class Task2Mapper extends TableMapper<LongWritable, LongWritable> {
-    private HashMap<Long, Long> map = new HashMap<Long, Long>();
+    private TreeMap<Long, Long> map = new TreeMap<Long, Long>();
+    private int topK;
 
+
+    @Override
+    protected void setup(Context context) throws IOException, InterruptedException {
+        super.setup(context);
+
+        topK = context.getConfiguration().getInt("TopK", 10);
+    }
+    
     public void map(ImmutableBytesWritable key, Result value, Context context) throws InterruptedException, IOException {
         byte[] row = value.getRow();
         long articleId = Bytes.toLong(Arrays.copyOfRange(row, 0, 8));
@@ -35,7 +41,14 @@ public class Task2Mapper extends TableMapper<LongWritable, LongWritable> {
     }
 
     protected void cleanup(Context context) throws IOException, InterruptedException {
-        for (Long k : map.keySet())
-            context.write(new LongWritable(k), new LongWritable(map.get(k)));
+
+        int i = 0;
+
+        for (Map.Entry<Long, Long> k : Helpers.entriesSorted(map)) {
+            if (i < topK) {
+                context.write(new LongWritable(k.getKey()), new LongWritable(k.getValue()));
+                i++;
+            }
+        }
     }
 }

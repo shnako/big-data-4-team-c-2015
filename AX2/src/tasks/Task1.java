@@ -26,8 +26,8 @@ public class Task1 extends Configured implements Tool {
         Configuration conf = HBaseConfiguration.create(getConf());
 
         conf.addResource("core-site.xml");
-        conf.set("mapred.jar", "file:///users/level4/1106695s/Desktop/BD4AX2.jar");
-
+        //conf.set("mapred.jar", "file:///users/level4/1106695s/Desktop/BD4AX2.jar");
+        conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
         Job job = new Job(conf);
 
         job.setJobName("Task 1");
@@ -58,7 +58,7 @@ public class Task1 extends Configured implements Tool {
         scan.setTimeRange(startDate, endDate);
         scan.setFilter(new KeyOnlyFilter());
 
-        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, Task1Mapper.class, VLongWritable.class, Text.class, job);
+        TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, Task1Mapper.class, VLongWritable.class, Text.class, job);
 
         job.submit();
 

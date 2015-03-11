@@ -1,12 +1,14 @@
 package tasks;
 
 import helpers.FilePrinter;
+import helpers.Helpers;
 import mappers.Task2Mapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.LongWritable;
@@ -19,20 +21,25 @@ import reducers.Task2Reducer;
 public class Task2 extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
-        Job job = Job.getInstance();
-        Configuration conf = HBaseConfiguration.create(job.getConfiguration());
+
+        Configuration conf = HBaseConfiguration.create(getConf());
+        Job job = new Job(conf);
         conf.addResource("client-conf-ug.xml");
-        conf.set("mapred.jar", "~/Desktop/bd4jar/AE2.jar");
+        //conf.set("mapred.jar", "~/Desktop/bd4jar/AE2.jar");
+        conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
+
+        long startDate = Helpers.convertTimestampToDate(strings[2]).getMillis();
+        long endDate = Helpers.convertTimestampToDate(strings[3]).getMillis();
 
         Scan scan = new Scan();
         scan.setBatch(100);
         scan.setCaching(100);
         scan.setCacheBlocks(false);
         scan.addFamily(Bytes.toBytes("WD"));
-        //scan.setFilter(new FirstKeyOnlyFilter());
-        // TODO Add filter that checks dates.
+        scan.setTimeRange(startDate, endDate);
+        scan.setFilter(new KeyOnlyFilter());
 
-        job.getConfiguration().setInt("TopK", Integer.parseInt(strings[3]));
+        job.getConfiguration().setInt("TopK", Integer.parseInt(strings[1]));
 
         job.setJobName("Task 2");
         job.setJarByClass(Task2.class);
@@ -45,13 +52,15 @@ public class Task2 extends Configured implements Tool {
 
         FileOutputFormat.setOutputPath(job, new Path(strings[0]));
 
-        //job.setNumReduceTasks(1);
+        job.setNumReduceTasks(16);
 
         job.submit();
 
+        int ret = job.waitForCompletion(true) ? 0 : 1;
+
         FilePrinter.printTopKFile(strings[0], strings[1]);
 
-        return (job.waitForCompletion(true)) ? 0 : 1;
+        return ret;
     }
 
     public static void main(String[] args) throws Exception {
