@@ -1,36 +1,33 @@
 package helpers;
 
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.VLongWritable;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class Helpers {
     public static final String ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    public static final String REVISION_TAG = "REVISION";
+    //public static final String REVISION_TAG = "REVISION";
 
-    public static Date convertTimestampToDate(String timestamp) throws ParseException {
-        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-        return iso8601Format.parse(timestamp);
+    public static DateTime convertTimestampToDate(String dateTimeString) {
+        DateTimeFormatter df = DateTimeFormat.forPattern(ISO8601_FORMAT);
+        return df.withOffsetParsed().parseDateTime(dateTimeString);
     }
 
-    public static String convertDateToTimestamp(Date date) {
-        DateFormat iso8601Format = new SimpleDateFormat(ISO8601_FORMAT);
-        return iso8601Format.format(date);
+    public static String convertDateToTimestamp(DateTime dateTime) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(ISO8601_FORMAT);
+        return dateTime.toString(dateTimeFormatter);
     }
 
-    public static Long[] getSortedLongWritableCollection(Iterable<LongWritable> revisionIds) {
+    public static Long[] getSortedVLongWritableCollection(Iterable<VLongWritable> revisionIds) {
         List<Long> list = new ArrayList<Long>();
         Long[] dummy = new Long[0];
-        for (LongWritable revision : revisionIds) {
+        for (VLongWritable revision : revisionIds) {
             list.add(revision.get());
         }
 
@@ -51,6 +48,7 @@ public abstract class Helpers {
      * @return a string array containing the first desiredTokenCount tokens or
      * null if either the string doesn't start with the startTag or the requested number of parameters could not be extracted.
      */
+    /*
     public static String[] fastStartsWithAndTokenize(int desiredTokenCount, String string, String startTag) {
         // Verify that the string starts with the specified startTag and return null otherwise.
         int position = 0;
@@ -79,8 +77,9 @@ public abstract class Helpers {
         // Return null if the requested number of tokens couldn't be extracted.
         return result[desiredTokenCount - 1] != null ? result : null;
     }
-
-    public static Date extractDateStringFromMalformedText(String string) {
+    */
+/*
+    public static DateTime extractDateStringFromMalformedText(String string) {
         Pattern pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})Z");
         Matcher matcher = pattern.matcher(string);
 
@@ -96,4 +95,5 @@ public abstract class Helpers {
             return null;
         }
     }
+    */
 }

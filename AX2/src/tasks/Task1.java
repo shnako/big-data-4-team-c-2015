@@ -1,18 +1,17 @@
 package tasks;
 
 import helpers.FilePrinter;
+import helpers.Helpers;
 import mappers.FrequencyMapper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.FirstKeyOnlyFilter;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.VLongWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -23,6 +22,9 @@ import reducers.FrequencyOccurrenceReducer;
 public class Task1 extends Configured implements Tool {
     @Override
     public int run(String[] strings) throws Exception {
+        long startDate = Helpers.convertTimestampToDate("2004-07-14T19:20:13Z").getMillis();
+        long endDate = Helpers.convertTimestampToDate("2007-07-14T19:20:25Z").getMillis();
+
         Configuration conf = HBaseConfiguration.create(getConf());
 
         conf.addResource("client-conf-ug.xml");
@@ -36,10 +38,10 @@ public class Task1 extends Configured implements Tool {
         job.setMapperClass(FrequencyMapper.class);
         job.setReducerClass(FrequencyOccurrenceReducer.class);
 
-        job.setMapOutputKeyClass(LongWritable.class);
-        job.setMapOutputValueClass(LongWritable.class);
+        job.setMapOutputKeyClass(VLongWritable.class);
+        job.setMapOutputValueClass(VLongWritable.class);
 
-        job.setOutputKeyClass(LongWritable.class);
+        job.setOutputKeyClass(VLongWritable.class);
         job.setOutputValueClass(Text.class);
 
         job.setNumReduceTasks(1);
@@ -55,8 +57,7 @@ public class Task1 extends Configured implements Tool {
         scan.setCaching(100);
         scan.setCacheBlocks(false);
         scan.addFamily(Bytes.toBytes("WD"));
-        //scan.setFilter(new FirstKeyOnlyFilter());
-        // TODO Add filter that checks dates.
+        scan.setTimeRange(startDate, endDate);
 
         TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, FrequencyMapper.class, Text.class, Text.class, job);
 
