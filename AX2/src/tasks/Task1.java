@@ -8,6 +8,7 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.Text;
@@ -43,9 +44,10 @@ public class Task1 extends Configured implements Tool {
 
         job.setNumReduceTasks(5);
 
-        FileOutputFormat.setOutputPath(job, new Path("/user/1106695s/bd4ax2/19"));
         long startDate = Helpers.convertTimestampToDate(strings[0]).getMillis();
         long endDate = Helpers.convertTimestampToDate(strings[1]).getMillis();
+        String outputPath = "/user/1106695s/bd4ax2/22";
+        FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
         Scan scan = new Scan();
         scan.setBatch(100);
@@ -53,13 +55,14 @@ public class Task1 extends Configured implements Tool {
         scan.setCacheBlocks(false);
         scan.addFamily(Bytes.toBytes("WD"));
         scan.setTimeRange(startDate, endDate);
+        scan.setFilter(new KeyOnlyFilter());
 
         TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, FrequencyMapper.class, VLongWritable.class, Text.class, job);
 
         job.submit();
 
         int ret = job.waitForCompletion(true) ? 0 : 1;
-        FilePrinter.printFile(strings[0]);
+        FilePrinter.printFile(outputPath);
         return ret;
     }
 
