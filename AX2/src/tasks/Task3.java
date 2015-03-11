@@ -45,9 +45,8 @@ public class Task3 extends Configured implements Tool {
 
         job.setNumReduceTasks(16);
 
-        long startDate = Helpers.convertTimestampToDate(strings[0]).getMillis();
-        long endDate = Helpers.convertTimestampToDate(strings[1]).getMillis();
-        String outputPath = "bd4ax2/35";
+        long endDate = Helpers.convertTimestampToMillis(strings[0]);
+        String outputPath = "bd4ax2/105";
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
         Scan scan = new Scan();
@@ -55,10 +54,10 @@ public class Task3 extends Configured implements Tool {
         scan.setCaching(100);
         scan.setCacheBlocks(false);
         scan.addFamily(Bytes.toBytes("WD"));
-        scan.setTimeRange(startDate, endDate);
+        scan.setTimeRange(0, endDate);
         scan.setFilter(new KeyOnlyFilter());
 
-        TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, Task3Mapper.class, VLongWritable.class, Text.class, job);
+        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, Task3Mapper.class, VLongWritable.class, Text.class, job);
 
         job.submit();
 

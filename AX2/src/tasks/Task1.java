@@ -45,9 +45,9 @@ public class Task1 extends Configured implements Tool {
 
         job.setNumReduceTasks(16);
 
-        long startDate = Helpers.convertTimestampToDate(strings[0]).getMillis();
-        long endDate = Helpers.convertTimestampToDate(strings[1]).getMillis();
-        String outputPath = "bd4ax2/39";
+        long startDate = Helpers.convertTimestampToMillis(strings[0]);
+        long endDate = Helpers.convertTimestampToMillis(strings[1]);
+        String outputPath = "bd4ax2/42";
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
         Scan scan = new Scan();
