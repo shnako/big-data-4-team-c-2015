@@ -1,5 +1,6 @@
 package tasks;
 
+import combiners.FrequencyCombiner;
 import helpers.FilePrinter;
 import mappers.FrequencyMapper;
 import org.apache.hadoop.conf.Configuration;
@@ -43,6 +44,7 @@ public class Task1 extends Configured implements Tool {
         TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, FrequencyMapper.class, LongWritable.class, LongWritable.class, job);
 
         job.setPartitionerClass(TotalOrderPartitioner.class);
+        job.setCombinerClass(FrequencyCombiner.class);
         job.setReducerClass(FrequencyOccurrenceReducer.class);
 
         job.setOutputKeyClass(LongWritable.class);

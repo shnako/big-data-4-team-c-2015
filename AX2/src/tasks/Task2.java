@@ -45,6 +45,8 @@ public class Task2 extends Configured implements Tool {
 
         FileOutputFormat.setOutputPath(job, new Path(strings[0]));
 
+        //job.setNumReduceTasks(1);
+
         job.submit();
 
         FilePrinter.printTopKFile(strings[0], strings[1]);

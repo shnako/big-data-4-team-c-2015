@@ -12,19 +12,20 @@ import java.io.InputStreamReader;
 
 public class FilePrinter {
     public static void printFile (String thePath) {
-        Path path = new Path(thePath);
         FileSystem fs = null;
-        BufferedReader reader = null;
         try {
             fs = FileSystem.get(new Configuration());
-            Path dest = new Path(thePath+"-final/result.txt");
-            FileUtil.copyMerge(fs, path, fs, dest, false, new Configuration(), "");
-            reader = new BufferedReader(new InputStreamReader(fs.open(dest)));
-            String line = reader.readLine();
-            while(line != null) {
-                System.out.println(line);
-                line = reader.readLine();
-          }
+            FileStatus[] status = fs.listStatus(new Path(thePath));
+            //assume files are in lexicographical order
+            BufferedReader[] readers = new BufferedReader[status.length];
+            String line;
+            for (int i = 0; i< status.length; i++)
+                readers[i] = new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
+            for (int i = 0; i<status.length; i++)
+                do {
+                    line = readers[i].readLine();
+                    System.out.println(line);
+                } while(readers[i].ready());
         } catch (IOException e) {
             e.printStackTrace();
         }
