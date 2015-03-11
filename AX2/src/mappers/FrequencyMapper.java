@@ -19,7 +19,7 @@ public class FrequencyMapper extends TableMapper<VLongWritable, Text> {
         long articleId = Bytes.toLong(Arrays.copyOfRange(row, 0, 8));
         long revisionId = Bytes.toLong(Arrays.copyOfRange(row, 8, 16));
 
-        if (articleId == -1) {
+        if (lastArticleId == -1) {
             lastArticleId = articleId;
             stringBuilder = new StringBuilder();
         }
