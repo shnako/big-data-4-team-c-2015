@@ -1,11 +1,7 @@
 package helpers;
 
 import com.google.common.collect.ComparisonChain;
-import org.apache.hadoop.io.*;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import org.apache.hadoop.io.VLongWritable;
 
 public class ArticleRevCountWritable implements Comparable<ArticleRevCountWritable> {
     private VLongWritable articleId;
@@ -13,10 +9,6 @@ public class ArticleRevCountWritable implements Comparable<ArticleRevCountWritab
 
     public ArticleRevCountWritable(VLongWritable articleId, VLongWritable revisionCount) {
         set(articleId, revisionCount);
-    }
-
-    public ArticleRevCountWritable() {
-        set(new VLongWritable(), new VLongWritable());
     }
 
     public void set(VLongWritable articleId, VLongWritable revisionCount) {

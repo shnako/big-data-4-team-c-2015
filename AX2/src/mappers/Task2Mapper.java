@@ -6,7 +6,6 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.VLongWritable;
 
 import java.io.IOException;
@@ -25,10 +24,10 @@ public class Task2Mapper extends TableMapper<VLongWritable, VLongWritable> {
     protected void setup(Context context) throws IOException, InterruptedException {
         super.setup(context);
 
-        long lastArticleId = -1;
+        lastArticleId = -1;
         topK = context.getConfiguration().getInt("TopK", 10);
     }
-    
+
     public void map(ImmutableBytesWritable key, Result value, Context context) throws InterruptedException, IOException {
         byte[] row = value.getRow();
         long articleId = Bytes.toLong(Arrays.copyOfRange(row, 0, 8));

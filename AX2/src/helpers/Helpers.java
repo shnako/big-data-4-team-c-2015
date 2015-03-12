@@ -1,7 +1,6 @@
 package helpers;
 
 import com.google.common.collect.ComparisonChain;
-import org.apache.hadoop.io.VLongWritable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,22 +24,11 @@ public abstract class Helpers {
         return convertMillisToTimestamp(Long.parseLong(millis));
     }
 
-    public static Long[] getSortedVLongWritableCollection(Iterable<VLongWritable> revisionIds) {
-        List<Long> list = new ArrayList<Long>();
-        Long[] dummy = new Long[0];
-        for (VLongWritable revision : revisionIds) {
-            list.add(revision.get());
-        }
-
-        Collections.sort(list);
-
-        return list.toArray(dummy);
-    }
-
-    public static <K extends Comparable<? super K>,V extends Comparable<? super V>> SortedSet<Map.Entry<K,V>> entriesSorted(Map<K,V> map) {
-        SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<Map.Entry<K,V>>(
-                new Comparator<Map.Entry<K,V>>() {
-                    @Override public int compare(Map.Entry<K,V> e1, Map.Entry<K,V> e2) {
+    public static <K extends Comparable<? super K>, V extends Comparable<? super V>> SortedSet<Map.Entry<K, V>> entriesSorted(Map<K, V> map) {
+        SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<Map.Entry<K, V>>(
+                new Comparator<Map.Entry<K, V>>() {
+                    @Override
+                    public int compare(Map.Entry<K, V> e1, Map.Entry<K, V> e2) {
                         return ComparisonChain.start().compare(e2.getValue(), e1.getValue()).compare(e1.getKey(), e2.getKey()).result();
                     }
                 }

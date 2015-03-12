@@ -26,8 +26,8 @@ public class Task3 extends Configured implements Tool {
         Configuration conf = HBaseConfiguration.create(getConf());
 
         conf.addResource("core-site.xml");
-        //conf.set("mapred.jar", "file:///users/level4/1106695s/Desktop/BD4AX2.jar");
-        conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
+        conf.set("mapred.jar", "file:///users/level4/1106695s/Desktop/BD4AX2.jar");
+        //conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
 
         Job job = new Job(conf);
 

@@ -25,8 +25,8 @@ public class Task2 extends Configured implements Tool {
         Configuration conf = HBaseConfiguration.create(getConf());
         Job job = new Job(conf);
         conf.addResource("client-conf-ug.xml");
-        //conf.set("mapred.jar", "~/Desktop/bd4jar/AE2.jar");
-        conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
+        conf.set("mapred.jar", "file:///users/level4/1106695s/Desktop/BD4AX2.jar");
+        //conf.set("mapred.jar", "file:///users/level4/1106729i/workspace/BD4/big-data-4-team-c-2015/AX2/lib/AE2.jar");
 
         long startDate = Helpers.convertTimestampToMillis(strings[2]);
         long endDate = Helpers.convertTimestampToMillis(strings[3]);
