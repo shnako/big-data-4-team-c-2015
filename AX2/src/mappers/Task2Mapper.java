@@ -1,6 +1,5 @@
 package mappers;
 
-
 import helpers.Helpers;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
-
 
 public class Task2Mapper extends TableMapper<VLongWritable, VLongWritable> {
     private TreeMap<Long, Long> map = new TreeMap<Long, Long>();
@@ -44,8 +42,6 @@ public class Task2Mapper extends TableMapper<VLongWritable, VLongWritable> {
         }
 
         revisionCount++;
-
-
     }
 
     protected void cleanup(Context context) throws IOException, InterruptedException {

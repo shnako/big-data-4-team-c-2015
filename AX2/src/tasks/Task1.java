@@ -47,7 +47,20 @@ public class Task1 extends Configured implements Tool {
 
         long startDate = Helpers.convertTimestampToMillis(strings[0]);
         long endDate = Helpers.convertTimestampToMillis(strings[1]);
-        String outputPath = "bd4ax2/42";
+
+        // Runs.
+//        String outputPath = "AX2/Task1/R1_16r3";
+//        String outputPath = "AX2/Task1/R2";
+//        String outputPath = "AX2/Task1/R3";
+//        String outputPath = "AX2/Task1/R4";
+//        String outputPath = "AX2/Task1/R5";
+//        String outputPath = "AX2/Task1/R6";
+//        String outputPath = "AX2/Task1/R7";
+//        String outputPath = "AX2/Task1/R8";
+//        String outputPath = "AX2/Task1/R9";
+//        String outputPath = "AX2/Task1/R10";
+        String outputPath = "AX2/Task1/R11";
+
         FileOutputFormat.setOutputPath(job, new Path(outputPath));
 
         Scan scan = new Scan();
@@ -58,7 +71,7 @@ public class Task1 extends Configured implements Tool {
         scan.setTimeRange(startDate, endDate);
         scan.setFilter(new KeyOnlyFilter());
 
-        TableMapReduceUtil.initTableMapperJob("BD4Project2Sample", scan, Task1Mapper.class, VLongWritable.class, Text.class, job);
+        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, Task1Mapper.class, VLongWritable.class, Text.class, job);
 
         job.submit();
 

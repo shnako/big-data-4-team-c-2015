@@ -37,6 +37,5 @@ public class Task2Reducer extends Reducer<VLongWritable, VLongWritable, VLongWri
         }
 
         super.cleanup(context);
-
     }
 }
