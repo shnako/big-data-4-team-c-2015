@@ -6,13 +6,14 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.VLongWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Task2Reducer extends Reducer<LongWritable, LongWritable, LongWritable, LongWritable> {
+public class Task2Reducer extends Reducer<VLongWritable, VLongWritable, VLongWritable, VLongWritable> {
     private TreeBag bag = new TreeBag();
     private int topK;
 
@@ -23,9 +24,9 @@ public class Task2Reducer extends Reducer<LongWritable, LongWritable, LongWritab
         topK = context.getConfiguration().getInt("TopK", 10);
     }
 
-    public void reduce(LongWritable key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
-        LongWritable revisionCount = new LongWritable(0);
-        Iterator<LongWritable> it = values.iterator();
+    public void reduce(VLongWritable key, Iterable<VLongWritable> values, Context context) throws IOException, InterruptedException {
+        VLongWritable revisionCount = new VLongWritable(0);
+        Iterator<VLongWritable> it = values.iterator();
         while (it.hasNext())
             revisionCount.set(revisionCount.get()+it.next().get());
 

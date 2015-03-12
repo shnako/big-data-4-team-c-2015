@@ -11,7 +11,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.VLongWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
@@ -44,11 +44,11 @@ public class Task2 extends Configured implements Tool {
         job.setJobName("Task 2");
         job.setJarByClass(Task2.class);
 
-        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, Task2Mapper.class, LongWritable.class, LongWritable.class, job);
+        TableMapReduceUtil.initTableMapperJob("BD4Project2", scan, Task2Mapper.class, VLongWritable.class, VLongWritable.class, job);
         job.setReducerClass(Task2Reducer.class);
 
-        job.setOutputKeyClass(LongWritable.class);
-        job.setOutputValueClass(LongWritable.class);
+        job.setOutputKeyClass(VLongWritable.class);
+        job.setOutputValueClass(VLongWritable.class);
 
         FileOutputFormat.setOutputPath(job, new Path(strings[0]));
 

@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.VLongWritable;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 
-public class Task2Mapper extends TableMapper<LongWritable, LongWritable> {
+public class Task2Mapper extends TableMapper<VLongWritable, VLongWritable> {
     private TreeMap<Long, Long> map = new TreeMap<Long, Long>();
     private int topK;
     private long lastArticleId;
@@ -57,7 +58,7 @@ public class Task2Mapper extends TableMapper<LongWritable, LongWritable> {
 
         for (Map.Entry<Long, Long> k : Helpers.entriesSorted(map)) {
             if (i < topK) {
-                context.write(new LongWritable(k.getKey()), new LongWritable(k.getValue()));
+                context.write(new VLongWritable(k.getKey()), new VLongWritable(k.getValue()));
                 i++;
             }
         }
