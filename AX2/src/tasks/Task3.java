@@ -46,21 +46,9 @@ public class Task3 extends Configured implements Tool {
 
         job.setNumReduceTasks(16);
 
-        long endDate = Helpers.convertTimestampToMillis(strings[0]);
+        long endDate = Helpers.convertTimestampToMillis(strings[1]);
 
-        // Runs.
-//        String outputPath = "AX2/Task3/R1";
-//        String outputPath = "AX2/Task3/R2";
-//        String outputPath = "AX2/Task3/R3";
-//        String outputPath = "AX2/Task3/R4";
-//        String outputPath = "AX2/Task3/R5";
-//        String outputPath = "AX2/Task3/R6";
-//        String outputPath = "AX2/Task3/R7";
-//        String outputPath = "AX2/Task3/R8";
-//        String outputPath = "AX2/Task3/R9";
-        String outputPath = "AX2/Task3/R10";
-
-        FileOutputFormat.setOutputPath(job, new Path(outputPath));
+        FileOutputFormat.setOutputPath(job, new Path(strings[0]));
 
         Scan scan = new Scan();
         scan.setBatch(100);
@@ -75,7 +63,7 @@ public class Task3 extends Configured implements Tool {
         job.submit();
 
         int ret = job.waitForCompletion(true) ? 0 : 1;
-        FilePrinter.printFile(outputPath);
+        FilePrinter.printFile(strings[0]);
         return ret;
     }
 

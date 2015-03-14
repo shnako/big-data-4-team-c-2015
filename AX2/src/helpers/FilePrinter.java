@@ -37,6 +37,7 @@ public class FilePrinter {
         FileSystem fs;
         int topK = Integer.parseInt(topKStr);
         try {
+            //fs = FileSystem.get(new Configuration());
             fs = FileSystem.get(new Configuration());
             FileStatus[] status = fs.listStatus(new Path(thePath));
             BufferedReader[] readers = new BufferedReader[status.length];
@@ -49,12 +50,18 @@ public class FilePrinter {
             }
             while (topK > 0) {
                 long max = 0;
+                long artId = Long.MAX_VALUE;
                 int dirty = -1;
                 for (int i = 0; i < status.length; i++) {
                     if (lines[i] != null) {
                         long revs = Long.parseLong(lines[i].split("\t")[1]);
+                        long art = Long.parseLong(lines[i].split("\t")[0]);
                         if (revs > max) {
                             max = revs;
+                            artId = art;
+                            dirty = i;
+                        } else if (revs == max && art < artId) {
+                            artId = art;
                             dirty = i;
                         }
                     }
